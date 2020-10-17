@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import providerSelectors from '@selectors/providers'
 import signerSelectors from '@selectors/signer'
 import { actions as providerActions } from '@reducers/provider'
+import { actions as solanaConnectionActions } from '@reducers/solanaConnection'
 import EventsHandlers from '@containers/EventsHandlers'
 import { Status } from '@reducers/signer'
 import PageSkeleton from '@components/PageSkeleton/PageSkeleton'
@@ -19,6 +20,7 @@ const WelcomePage: React.FC = () => {
   const dispatch = useDispatch()
   React.useEffect(() => {
     dispatch(providerActions.initProvider())
+    dispatch(solanaConnectionActions.initSolanaConnection())
   }, [dispatch])
 
   return (

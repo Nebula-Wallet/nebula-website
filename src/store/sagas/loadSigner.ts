@@ -2,8 +2,8 @@ import { call, put, takeLeading } from 'typed-redux-saga'
 
 import { actions, Status } from '@reducers/signer'
 import { actions as snackbarsActions } from '@reducers/snackbars'
-import { getSigner } from '@web3/access'
-import { getAddress, getBalance } from '@web3/signer'
+import { getSigner } from '@web3/eth/access'
+import { getAddress, getBalance } from '@web3/eth/signer'
 
 export function* initSigner(): Generator {
   if (!window.ethereum) {
@@ -20,7 +20,7 @@ export function* initSigner(): Generator {
     yield put(actions.setBalance(userBalance))
     yield put(
       snackbarsActions.add({
-        message: 'Wallet connected.',
+        message: 'Ethereum network connected.',
         variant: 'success',
         persist: false
       })

@@ -1,29 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { SolanaNetworks } from '@web3/solana/connection'
 import { PayloadType } from './types'
-import { Network } from '@web3/eth/static/network'
 export enum Status {
   Uninitialized = 'uninitialized',
   Init = 'init',
   Error = 'error',
   Initalized = 'initalized'
 }
-export interface IProviderStore {
+export interface ISolanaConnectionStore {
   status: Status
   message: string
-  network: Network
+  network: SolanaNetworks
 }
 
-export const defaultState: IProviderStore = {
+export const defaultState: ISolanaConnectionStore = {
   status: Status.Uninitialized,
   message: '',
-  network: Network.MAINNET
+  network: SolanaNetworks.DEV
 }
-export const providerSliceName = 'provider'
-const providerSlice = createSlice({
-  name: providerSliceName,
+export const solanaConnectionSliceName = 'solanaConnection'
+const solanaConnectionSlice = createSlice({
+  name: solanaConnectionSliceName,
   initialState: defaultState,
   reducers: {
-    initProvider(state) {
+    initSolanaConnection(state) {
       state.status = Status.Init
       return state
     },
@@ -35,13 +35,13 @@ const providerSlice = createSlice({
       state.message = action.payload
       return state
     },
-    setNetwork(state, action: PayloadAction<Network>) {
+    setNetwork(state, action: PayloadAction<SolanaNetworks>) {
       state.network = action.payload
       return state
     }
   }
 })
 
-export const actions = providerSlice.actions
-export const reducer = providerSlice.reducer
+export const actions = solanaConnectionSlice.actions
+export const reducer = solanaConnectionSlice.reducer
 export type PayloadTypes = PayloadType<typeof actions>

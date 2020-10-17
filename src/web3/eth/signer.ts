@@ -1,4 +1,4 @@
-import { getSigner } from '@web3/access'
+import { getSigner } from '@web3/eth/access'
 import { BigNumber } from 'ethers'
 
 export const getAddress = async (): Promise<string> => await (await getSigner()).getAddress()

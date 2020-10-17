@@ -1,8 +1,8 @@
 import { call, put, takeLeading } from 'typed-redux-saga'
 
 import { actions, Status } from '@reducers/provider'
-import { getProvider } from '@web3/access'
-import { Network } from '@web3/static/network'
+import { getProvider } from '@web3/eth/access'
+import { Network } from '@web3/eth/static/network'
 import { actions as signerActions } from '@reducers/signer'
 
 export function* initProvider(): Generator {

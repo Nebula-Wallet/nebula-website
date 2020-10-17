@@ -8,7 +8,7 @@ const getProvider = async (): Promise<providers.Web3Provider> => {
     return _provider
   } else {
     _provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-    _provider.on('network', (_newNetwork, _oldNetwork) => {
+    _provider.on('network', (_newNetwork: any, _oldNetwork: any) => {
       // When a Provider makes its initial connection, it emits a "network"
       // event with a null oldNetwork along with the newNetwork. So, if the
       // oldNetwork exists, it represents a changing network
