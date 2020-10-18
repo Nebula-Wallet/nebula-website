@@ -5,20 +5,24 @@ import { ThemeProvider } from '@material-ui/core'
 
 import { store } from './store'
 import { theme } from './static/theme'
-
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
 import WelcomePage from '@containers/WelcomePage/WelcomePage'
 import Notifier from '@containers/Notifier/Notifier'
 import { SnackbarProvider } from 'notistack'
 
 const App: React.FC = () => {
+  const persistor = persistStore(store)
   return (
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={99}>
-          <WelcomePage />
-          <Notifier />
-        </SnackbarProvider>
-      </ThemeProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider theme={theme}>
+          <SnackbarProvider maxSnack={99}>
+            <WelcomePage />
+            <Notifier />
+          </SnackbarProvider>
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   )
 }
