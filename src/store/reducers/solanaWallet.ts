@@ -8,10 +8,17 @@ export interface ITokenAccount {
   address: string
   decimals: number
 }
+export interface ITransaction {
+  recipient: string
+  amount: number
+  txid: string
+  sending: boolean
+}
 export interface ISolanaWallet {
   status: Status
   address: string
   balance: number
+  transactions: { [key in string]: ITransaction }
   accounts: { [key in string]: ITokenAccount[] }
 }
 
@@ -19,6 +26,7 @@ export const defaultState: ISolanaWallet = {
   status: Status.Uninitialized,
   address: '',
   balance: 0,
+  transactions: {},
   accounts: {}
 }
 export const solanaWalletSliceName = 'solanaWallet'
@@ -41,6 +49,20 @@ const solanaWalletSlice = createSlice({
       state.balance = action.payload
       return state
     },
+    addTransaction(state, action: PayloadAction<IaddTransaction>) {
+      state.transactions[action.payload.id] = {
+        recipient: action.payload.recipient,
+        amount: action.payload.amount,
+        txid: '',
+        sending: true
+      }
+      return state
+    },
+    setTransactionTxid(state, action: PayloadAction<{ txid: string, id: string }>) {
+      state.transactions[action.payload.id].txid = action.payload.txid
+      state.transactions[action.payload.id].sending = false
+      return state
+    },
     addTokenAccount(state, action: PayloadAction<ITokenAccount>) {
       if (!state.accounts[action.payload.programId]) {
         state.accounts[action.payload.programId] = []
@@ -61,6 +83,11 @@ interface IsetTokenBalance {
   address: string
   programId: string
   balance: number
+}
+interface IaddTransaction {
+  recipient: string
+  amount: number
+  id: string
 }
 export const actions = solanaWalletSlice.actions
 export const reducer = solanaWalletSlice.reducer

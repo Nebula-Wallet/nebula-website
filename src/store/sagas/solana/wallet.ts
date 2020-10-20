@@ -1,12 +1,22 @@
-import { call, takeLeading, SagaGenerator, put, select } from 'typed-redux-saga'
+import {
+  call,
+  takeLeading,
+  SagaGenerator,
+  put,
+  select,
+  takeEvery,
+  spawn,
+  all
+} from 'typed-redux-saga'
 
-import { actions } from '@reducers/solanaWallet'
+import { actions, PayloadTypes } from '@reducers/solanaWallet'
 import { getConnection } from './connection'
 import { getSolanaWallet, TokenProgramMap } from '@web3/solana/wallet'
-import { Account, PublicKey } from '@solana/web3.js'
+import { Account, PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
 import { Token } from '@solana/spl-token'
 import { network } from '@selectors/solanaConnection'
 import { Status } from '@reducers/provider'
+import { PayloadAction } from '@reduxjs/toolkit'
 
 export function* getWallet(): SagaGenerator<Account> {
   const wallet = yield* call(getSolanaWallet)
@@ -16,6 +26,30 @@ export function* getBalance(pubKey: PublicKey): SagaGenerator<number> {
   const connection = yield* call(getConnection)
   const balance = yield* call([connection, connection.getBalance], pubKey)
   return balance
+}
+export function* sendSol(action: PayloadAction<PayloadTypes['addTransaction']>): Generator {
+  const connection = yield* call(getConnection)
+  const wallet = yield* call(getWallet)
+  const signature = yield* call(
+    [connection, connection.sendTransaction],
+    new Transaction().add(
+      SystemProgram.transfer({
+        fromPubkey: wallet.publicKey,
+        toPubkey: new PublicKey(action.payload.recipient),
+        lamports: action.payload.amount * 1e9
+      })
+    ),
+    [wallet],
+    {
+      preflightCommitment: 'recent'
+    }
+  )
+  yield put(
+    actions.setTransactionTxid({
+      txid: signature,
+      id: action.payload.id
+    })
+  )
 }
 interface IparsedTokenInfo {
   mint: string
@@ -118,6 +152,12 @@ export function* init(): Generator {
   // yield* call(createAccount, '7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp')
 }
 
-export function* walletSaga(): Generator {
+export function* transactionsSaga(): Generator {
+  yield takeEvery(actions.addTransaction, sendSol)
+}
+export function* initSaga(): Generator {
   yield takeLeading(actions.initWallet, init)
+}
+export function* walletSaga(): Generator {
+  yield all([transactionsSaga, initSaga].map(spawn))
 }

@@ -10,7 +10,7 @@ import { reducer as solanaConnectionReducer, solanaConnectionSliceName } from '.
 const authPersistConfig = {
   key: solanaWalletSliceName,
   storage: storage,
-  blacklist: ['accounts']
+  whitelist: ['address']
 }
 
 const combinedReducers = combineReducers({

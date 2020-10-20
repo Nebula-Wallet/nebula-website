@@ -20,21 +20,6 @@ const SolanaWalletEvents = () => {
       return
     }
     const connectEvents = () => {
-      connection.onProgramAccountChange(new PublicKey(publicKey), accountInfo => {
-        console.log(accountInfo)
-      })
-      connection.onProgramAccountChange(
-        new PublicKey('7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp'),
-        accountInfo => {
-          console.log(accountInfo)
-        }
-      )
-      connection.onProgramAccountChange(
-        new PublicKey('7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp'),
-        accountInfo => {
-          console.log(accountInfo)
-        }
-      )
       connection.onAccountChange(new PublicKey(publicKey), (accountInfo: AccountInfo<Buffer>) => {
         dispatch(actions.setBalance(accountInfo.lamports))
         console.log(accountInfo)

@@ -15,7 +15,8 @@ const useStyles = makeStyles(() =>
       width: '100%'
     },
     contentWrapper: {
-      maxWidth: 1360
+      maxWidth: 1160,
+      padding: 16
     },
     spacing40: {
       marginTop: 40
