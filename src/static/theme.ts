@@ -25,6 +25,10 @@ export const colors = {
   },
   red: {
     main: '#EB5757'
+  },
+  purple: {
+    magenta: '#A1045A',
+    orchid: '#AF69EF'
   }
 }
 export const theme = createMuiTheme({
@@ -39,6 +43,9 @@ export const theme = createMuiTheme({
     text: {
       primary: '#FFFFFF',
       secondary: '#030313'
+    },
+    error: {
+      main: '#E15757'
     }
   },
   typography: {
@@ -58,6 +65,15 @@ export const theme = createMuiTheme({
     },
     h3: {
       fontSize: 32
+    },
+    h4: {
+      fontSize: 24
+    },
+    h5: {
+      fontSize: 16
+    },
+    h6: {
+      fontSize: 12
     }
   }
 })

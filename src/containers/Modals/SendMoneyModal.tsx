@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import SendMoneyModalComponent from '@components/Modals/SendMoneyModal/SendMoneyModal'
-import { transactions } from '@selectors/solanaWallet'
+import { balance, transactions } from '@selectors/solanaWallet'
 import { actions } from '@reducers/solanaWallet'
 
 export interface ISendMoneyModal {
@@ -13,6 +13,7 @@ export interface ISendMoneyModal {
 export const SendMoneyModal: React.FC<ISendMoneyModal> = ({ open, handleClose }) => {
   const dispatch = useDispatch()
   const pendingTransactions = useSelector(transactions)
+  const myBalance = useSelector(balance)
   const [random, setRandom] = useState(Math.random().toString())
   return (
     <SendMoneyModalComponent
@@ -29,6 +30,7 @@ export const SendMoneyModal: React.FC<ISendMoneyModal> = ({ open, handleClose })
           setRandom(Math.random().toString())
         }, 300)
       }}
+      balance={myBalance / 10 ** 9}
     />
   )
 }

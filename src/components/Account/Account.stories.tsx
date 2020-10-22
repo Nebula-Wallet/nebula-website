@@ -2,7 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import Account from './Account'
 import { withKnobs } from '@storybook/addon-knobs'
-storiesOf('buttons/CommonButton', module)
+storiesOf('ui/Account', module)
   .addDecorator(withKnobs)
   .add('default', () => (
     <Account

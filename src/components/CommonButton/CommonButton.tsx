@@ -5,17 +5,27 @@ import useStyles from './style'
 
 export interface IProps {
   name: string
-  onClick: () => void
+  onClick?: () => void
   className?: string
   color?: PropTypes.Color
+  disabled?: boolean
 }
-export const CommonButton: React.FC<IProps> = ({ name, onClick, className, color = 'primary' }) => {
+export const CommonButton: React.FC<IProps> = ({
+  name,
+  onClick,
+  className,
+  color = 'primary',
+  disabled = false
+}) => {
   const classes = useStyles()
   return (
     <Button
       className={classNames(className, classes.button)}
       color={color}
       variant='outlined'
+      classes={{ disabled: classes.disabled }}
+      disabled={disabled}
+      type={onClick ? 'button' : 'submit'}
       onClick={onClick}>
       {name}
     </Button>

@@ -18,6 +18,11 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: colors.black.background,
       backgroundColor: `${theme.palette.primary.main}`
     }
+  },
+  disabled: {
+    color: `${colors.gray.skeletonField} !important`,
+    borderWidth: '2px !important',
+    borderColor: `${colors.gray.skeletonField} !important`
   }
 }))
 

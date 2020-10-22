@@ -13,6 +13,8 @@ export interface ITransaction {
   amount: number
   txid: string
   sending: boolean
+  token?: string
+  error?: string
 }
 export interface ISolanaWallet {
   status: Status
@@ -54,12 +56,18 @@ const solanaWalletSlice = createSlice({
         recipient: action.payload.recipient,
         amount: action.payload.amount,
         txid: '',
-        sending: true
+        sending: true,
+        token: action.payload.token
       }
       return state
     },
     setTransactionTxid(state, action: PayloadAction<{ txid: string, id: string }>) {
       state.transactions[action.payload.id].txid = action.payload.txid
+      state.transactions[action.payload.id].sending = false
+      return state
+    },
+    setTransactionError(state, action: PayloadAction<{ error: string, id: string }>) {
+      state.transactions[action.payload.id].error = action.payload.error
       state.transactions[action.payload.id].sending = false
       return state
     },
@@ -88,6 +96,8 @@ interface IaddTransaction {
   recipient: string
   amount: number
   id: string
+  token?: string
+  accountAddress?: string
 }
 export const actions = solanaWalletSlice.actions
 export const reducer = solanaWalletSlice.reducer

@@ -17,6 +17,7 @@ import { Token } from '@solana/spl-token'
 import { network } from '@selectors/solanaConnection'
 import { Status } from '@reducers/provider'
 import { PayloadAction } from '@reduxjs/toolkit'
+import { actions as snackbarsActions } from '@reducers/snackbars'
 
 export function* getWallet(): SagaGenerator<Account> {
   const wallet = yield* call(getSolanaWallet)
@@ -27,29 +28,65 @@ export function* getBalance(pubKey: PublicKey): SagaGenerator<number> {
   const balance = yield* call([connection, connection.getBalance], pubKey)
   return balance
 }
-export function* sendSol(action: PayloadAction<PayloadTypes['addTransaction']>): Generator {
+export function* handleTransaction(
+  action: PayloadAction<PayloadTypes['addTransaction']>
+): Generator {
   const connection = yield* call(getConnection)
   const wallet = yield* call(getWallet)
-  const signature = yield* call(
-    [connection, connection.sendTransaction],
-    new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: wallet.publicKey,
-        toPubkey: new PublicKey(action.payload.recipient),
-        lamports: action.payload.amount * 1e9
-      })
-    ),
-    [wallet],
-    {
-      preflightCommitment: 'recent'
+  // Send token
+  try {
+    if (action.payload.token && action.payload.accountAddress) {
+      const signature = yield* call(
+        sendToken,
+        action.payload.accountAddress,
+        action.payload.recipient,
+        action.payload.amount * 1e9,
+        action.payload.token
+      )
+      yield put(
+        actions.setTransactionTxid({
+          txid: signature,
+          id: action.payload.id
+        })
+      )
+    } else {
+      // Send SOL
+      const signature = yield* call(
+        [connection, connection.sendTransaction],
+        new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: wallet.publicKey,
+            toPubkey: new PublicKey(action.payload.recipient),
+            lamports: action.payload.amount * 1e9
+          })
+        ),
+        [wallet],
+        {
+          preflightCommitment: 'singleGossip'
+        }
+      )
+      yield put(
+        actions.setTransactionTxid({
+          txid: signature,
+          id: action.payload.id
+        })
+      )
     }
-  )
-  yield put(
-    actions.setTransactionTxid({
-      txid: signature,
-      id: action.payload.id
-    })
-  )
+  } catch (error) {
+    yield put(
+      snackbarsActions.add({
+        message: 'Failed to send. Please try again.',
+        variant: 'error',
+        persist: false
+      })
+    )
+    yield put(
+      actions.setTransactionError({
+        error: error,
+        id: action.payload.id
+      })
+    )
+  }
 }
 interface IparsedTokenInfo {
   mint: string
@@ -105,7 +142,7 @@ export function* sendToken(
   target: string,
   amount: number,
   tokenAddress: string
-): Generator {
+): SagaGenerator<string> {
   const token = yield* call(getToken, tokenAddress)
   const wallet = yield* call(getWallet)
   const signature = yield* call(
@@ -116,7 +153,7 @@ export function* sendToken(
     [],
     amount
   )
-  console.log(signature)
+  return signature
 }
 export function* createAccount(tokenAddress: string): Generator {
   const token = yield* call(getToken, tokenAddress)
@@ -153,7 +190,7 @@ export function* init(): Generator {
 }
 
 export function* transactionsSaga(): Generator {
-  yield takeEvery(actions.addTransaction, sendSol)
+  yield takeEvery(actions.addTransaction, handleTransaction)
 }
 export function* initSaga(): Generator {
   yield takeLeading(actions.initWallet, init)

@@ -21,6 +21,11 @@ export const tokensAggregated = createSelector(accounts, tokensAccounts => {
     }
   })
 })
+export const accountsArray = createSelector(accounts, tokensAccounts => {
+  return Object.values(tokensAccounts).reduce((acc, accounts) => {
+    return acc.concat(accounts)
+  }, [])
+})
 export const solanaWalletSelectors = {
   address,
   balance,

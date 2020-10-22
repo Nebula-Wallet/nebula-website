@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     '& .MuiDialog-paper': {
       padding: 10,
-      height: 450,
-      width: 450,
+      height: 400,
+      width: 430,
       background: colors.green.main
     }
   },
@@ -39,15 +39,32 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: colors.green.main
   },
   input: {
-    '& .MuiFormLabel-root': {
+    '& .MuiInputLabel-outlined': {
       color: theme.palette.primary.main
+    },
+    '& .MuiFormLabel-root.Mui-error': {
+      color: colors.red.main
     },
     '& .MuiOutlinedInput-notchedOutline': {
       borderColor: 'rgba(0,249,187,0.25)'
+    },
+    '& input::-webkit-clear-button, & input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+      display: 'none'
+    },
+    '& .MuiInputBase-input': {
+      MozAppearance: 'textfield'
     }
   },
   inputDiv: {
-    minHeight: 100
+    minHeight: 100,
+    position: 'relative'
+  },
+  maxBalance: {
+    position: 'absolute',
+    right: 0,
+    top: 65,
+    color: theme.palette.primary.main,
+    cursor: 'pointer'
   },
   txid: {
     wordBreak: 'break-all',

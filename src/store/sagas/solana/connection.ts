@@ -26,11 +26,13 @@ export function* initConnection(): Generator {
     yield put(solanaWalletActions.initWallet())
   } catch (error) {
     yield put(actions.setStatus(Status.Error))
-    snackbarsActions.add({
-      message: 'Failed to connect to Solana network',
-      variant: 'error',
-      persist: false
-    })
+    yield put(
+      snackbarsActions.add({
+        message: 'Failed to connect to Solana network',
+        variant: 'error',
+        persist: false
+      })
+    )
   }
 }
 

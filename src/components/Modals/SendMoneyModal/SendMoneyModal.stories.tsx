@@ -17,6 +17,7 @@ storiesOf('modal/SendMoneyModal', module)
         onSend={() => {
           console.log('send SendMoneyModal')
         }}
+        balance={123}
       />
     )
   })
@@ -32,6 +33,7 @@ storiesOf('modal/SendMoneyModal', module)
         onSend={() => {
           console.log('send SendMoneyModal')
         }}
+        balance={123}
       />
     )
   })
