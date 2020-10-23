@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { SolanaNetworks } from '@web3/solana/connection'
 import { Status } from './provider'
 import { PayloadType } from './types'
 
@@ -20,6 +21,7 @@ export interface ISolanaWallet {
   status: Status
   address: string
   balance: number
+  governedTokens: { [key in SolanaNetworks]: string[] }
   transactions: { [key in string]: ITransaction }
   accounts: { [key in string]: ITokenAccount[] }
 }
@@ -28,6 +30,7 @@ export const defaultState: ISolanaWallet = {
   status: Status.Uninitialized,
   address: '',
   balance: 0,
+  governedTokens: { [SolanaNetworks.DEV]: [] },
   transactions: {},
   accounts: {}
 }
@@ -76,6 +79,10 @@ const solanaWalletSlice = createSlice({
         state.accounts[action.payload.programId] = []
       }
       state.accounts[action.payload.programId].push(action.payload)
+      return state
+    },
+    addGovernedToken(state, action: PayloadAction<{ network: SolanaNetworks, tokenAddress: string }>) {
+      state.governedTokens[action.payload.network].push(action.payload.tokenAddress)
       return state
     },
     setTokenBalance(state, action: PayloadAction<IsetTokenBalance>) {

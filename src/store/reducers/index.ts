@@ -6,17 +6,19 @@ import { reducer as signerReducer, signerSliceName } from './signer'
 import { reducer as snackbarsReducer, snackbarsSliceName } from './snackbars'
 import { reducer as solanaWalletReducer, solanaWalletSliceName } from './solanaWallet'
 import { reducer as solanaConnectionReducer, solanaConnectionSliceName } from './solanaConnection'
+import { reducer as uiReducer, uiSliceName } from './ui'
 
 const authPersistConfig = {
   key: solanaWalletSliceName,
   storage: storage,
-  whitelist: ['address']
+  whitelist: ['address', 'governedTokens']
 }
 
 const combinedReducers = combineReducers({
   [providerSliceName]: providerReducer,
   [signerSliceName]: signerReducer,
   [snackbarsSliceName]: snackbarsReducer,
+  [uiSliceName]: uiReducer,
   [solanaConnectionSliceName]: solanaConnectionReducer,
   [solanaWalletSliceName]: persistReducer(authPersistConfig, solanaWalletReducer)
 })

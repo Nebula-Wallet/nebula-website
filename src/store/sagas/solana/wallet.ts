@@ -18,6 +18,7 @@ import { network } from '@selectors/solanaConnection'
 import { Status } from '@reducers/provider'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { actions as snackbarsActions } from '@reducers/snackbars'
+// import { createToken } from './token'
 
 export function* getWallet(): SagaGenerator<Account> {
   const wallet = yield* call(getSolanaWallet)
@@ -108,6 +109,7 @@ export function* fetchTokensAccounts(): Generator {
       programId: new PublicKey(TokenProgramMap[currentNetwork])
     }
   )
+
   for (const account of tokensAccounts.value) {
     const info: IparsedTokenInfo = account.account.data.parsed.info
     yield put(
@@ -118,6 +120,29 @@ export function* fetchTokensAccounts(): Generator {
         decimals: info.tokenAmount.decimals
       })
     )
+  }
+}
+// Takes kinda lot of time
+export function* fetchGovernedTokens(): Generator {
+  const connection = yield* call(getConnection)
+  const currentNetwork = yield* select(network)
+  const wallet = yield* call(getWallet)
+
+  const info = yield* call(
+    [connection, connection.getParsedProgramAccounts],
+    new PublicKey(TokenProgramMap[currentNetwork])
+  )
+  console.log(info)
+  console.log(wallet.publicKey.toString())
+  for (const acc of info) {
+    // @ts-expect-error
+    if (acc.account.data.parsed.info.mintAuthority === wallet.publicKey.toString()) {
+      // @ts-expect-error
+      console.log(acc.account.data.parsed)
+      yield put(
+        actions.addGovernedToken({ network: currentNetwork, tokenAddress: acc.pubkey.toString() })
+      )
+    }
   }
 }
 export function* getToken(tokenAddress: string): SagaGenerator<Token> {
@@ -179,6 +204,8 @@ export function* init(): Generator {
   yield put(actions.setAddress(wallet.publicKey.toString()))
   yield put(actions.setBalance(balance))
   yield put(actions.setStatus(Status.Initalized))
+  // const address = yield* call(fetchGovernedTokens)
+  // console.log(address)
   // yield* call(
   //   sendToken,
   //   'CDeKid1BQ4kL2xi4Ytn8XsKpCeoYnT4XULKLTtrg2FvK',
