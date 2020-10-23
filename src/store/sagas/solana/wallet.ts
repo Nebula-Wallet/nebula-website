@@ -122,25 +122,37 @@ export function* fetchTokensAccounts(): Generator {
     )
   }
 }
+interface ITokenInfo {
+  decimals: number
+  freezeAuthority: string | null
+  isInitialized: boolean
+  mintAuthority: string | null
+  supply: string
+}
 // Takes kinda lot of time
 export function* fetchGovernedTokens(): Generator {
   const connection = yield* call(getConnection)
   const currentNetwork = yield* select(network)
   const wallet = yield* call(getWallet)
-
   const info = yield* call(
     [connection, connection.getParsedProgramAccounts],
     new PublicKey(TokenProgramMap[currentNetwork])
   )
-  console.log(info)
-  console.log(wallet.publicKey.toString())
   for (const acc of info) {
     // @ts-expect-error
-    if (acc.account.data.parsed.info.mintAuthority === wallet.publicKey.toString()) {
-      // @ts-expect-error
-      console.log(acc.account.data.parsed)
+    const data = acc.account.data.parsed.info as ITokenInfo
+    if (data.mintAuthority === wallet.publicKey.toString()) {
       yield put(
-        actions.addGovernedToken({ network: currentNetwork, tokenAddress: acc.pubkey.toString() })
+        actions.addGovernedToken({
+          network: currentNetwork,
+          tokenData: {
+            decimals: data.decimals,
+            freezeAuthority: data.freezeAuthority,
+            mintAuthority: data.mintAuthority,
+            programId: acc.pubkey.toString(),
+            supply: parseInt(data.supply)
+          }
+        })
       )
     }
   }
@@ -205,6 +217,7 @@ export function* init(): Generator {
   yield put(actions.setBalance(balance))
   yield put(actions.setStatus(Status.Initalized))
   // const address = yield* call(fetchGovernedTokens)
+  // const address = yield* call(getTokenDetails)
   // console.log(address)
   // yield* call(
   //   sendToken,

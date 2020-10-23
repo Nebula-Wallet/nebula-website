@@ -15,6 +15,7 @@ import useStyles from './style'
 import WalletPage from '@containers/WalletPage/WalletPage'
 import { navigation } from '@selectors/ui'
 import { Tabs } from '@components/Header/Header'
+import GovernPage from '@containers/GovernPage/GovernPage'
 
 const WelcomePage: React.FC = () => {
   const classes = useStyles()
@@ -32,7 +33,7 @@ const WelcomePage: React.FC = () => {
       case Tabs.Wallet:
         return <WalletPage />
       case Tabs.Govern:
-        return <></>
+        return <GovernPage />
       default:
         return <WalletPage />
     }

@@ -9,6 +9,13 @@ export interface ITokenAccount {
   address: string
   decimals: number
 }
+export interface ITokenData {
+  programId: string
+  mintAuthority: string | null
+  freezeAuthority: string | null
+  supply: number
+  decimals: number
+}
 export interface ITransaction {
   recipient: string
   amount: number
@@ -21,7 +28,7 @@ export interface ISolanaWallet {
   status: Status
   address: string
   balance: number
-  governedTokens: { [key in SolanaNetworks]: string[] }
+  governedTokens: { [key in SolanaNetworks]: ITokenData[] }
   transactions: { [key in string]: ITransaction }
   accounts: { [key in string]: ITokenAccount[] }
 }
@@ -81,8 +88,18 @@ const solanaWalletSlice = createSlice({
       state.accounts[action.payload.programId].push(action.payload)
       return state
     },
-    addGovernedToken(state, action: PayloadAction<{ network: SolanaNetworks, tokenAddress: string }>) {
-      state.governedTokens[action.payload.network].push(action.payload.tokenAddress)
+    addGovernedToken(
+      state,
+      action: PayloadAction<{ network: SolanaNetworks, tokenData: ITokenData }>
+    ) {
+      const index = state.governedTokens[action.payload.network].findIndex(
+        token => token.programId === action.payload.tokenData.programId
+      )
+      if (index === -1) {
+        state.governedTokens[action.payload.network].push(action.payload.tokenData)
+      } else {
+        state.governedTokens[action.payload.network][index] = action.payload.tokenData
+      }
       return state
     },
     setTokenBalance(state, action: PayloadAction<IsetTokenBalance>) {

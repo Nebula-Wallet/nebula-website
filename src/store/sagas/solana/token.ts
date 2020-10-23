@@ -3,7 +3,7 @@ import { call, put, SagaGenerator, select } from 'typed-redux-saga'
 import { getConnection } from './connection'
 import { TokenProgramMap } from '@web3/solana/wallet'
 import { PublicKey } from '@solana/web3.js'
-import { Token } from '@solana/spl-token'
+import { MintInfo, Token } from '@solana/spl-token'
 import { network } from '@selectors/solanaConnection'
 import { getWallet } from './wallet'
 import { actions } from '@reducers/solanaWallet'
@@ -29,17 +29,32 @@ export function* createToken(
 
   // @ts-expect-error
   const tokenPubKey = token.publicKey.toString() as string
-  yield* put(actions.addGovernedToken({ network: currentNetwork, tokenAddress: tokenPubKey }))
+  yield* put(
+    actions.addGovernedToken({
+      network: currentNetwork,
+      tokenData: {
+        decimals: decimals,
+        freezeAuthority: freezeAuthority ?? null,
+        mintAuthority: mintAuthority ?? wallet.publicKey.toString(),
+        programId: tokenPubKey,
+        supply: 0
+      }
+    })
+  )
   return tokenPubKey
-  // return token.publicKey.toString()
-  // yield* call(
-  //   sendToken,
-  //   'CDeKid1BQ4kL2xi4Ytn8XsKpCeoYnT4XULKLTtrg2FvK',
-  //   'AgGfPnfCyfa71My835QupNZ4m7sKDEwaVHT8xkDQudaa',
-  //   100 * 1e9,
-  //   '7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp'
-  // )
-  // yield* call(createAccount, '7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp')
+}
+export function* getTokenDetails(address: string): SagaGenerator<MintInfo> {
+  const wallet = yield* call(getWallet)
+  const connection = yield* call(getConnection)
+  const currentNetwork = yield* select(network)
+  const token = new Token(
+    connection,
+    new PublicKey(address),
+    new PublicKey(TokenProgramMap[currentNetwork]),
+    wallet
+  )
+  const info = yield* call([token, token.getMintInfo])
+  return info
 }
 
 // export function* createToken(): Generator {
