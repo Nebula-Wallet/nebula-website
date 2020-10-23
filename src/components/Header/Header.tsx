@@ -1,11 +1,11 @@
 import React from 'react'
 import { BottomNavigation, BottomNavigationAction, Grid, Typography } from '@material-ui/core'
 // import SynthetifyIconHorizontal from '@components/SynthetifyIconHorizontal/SynthetifyIconHorizontal'
-import RestoreIcon from '@material-ui/icons/Restore'
-import FavoriteIcon from '@material-ui/icons/Favorite'
 import CommonButton from '@components/CommonButton/CommonButton'
-import useStyles from './style'
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
+import AppsIcon from '@material-ui/icons/Apps'
 
+import useStyles from './style'
 export enum Tabs {
   Wallet = 'Wallet',
   Govern = 'Govern'
@@ -45,7 +45,7 @@ export const Header: React.FC<IHeader> = ({
             className={classes.navigationRoot}>
             <BottomNavigationAction
               label={Tabs.Wallet}
-              icon={<RestoreIcon fontSize='large' />}
+              icon={<AccountBalanceWalletIcon fontSize='large' />}
               color='primary'
               value={Tabs.Wallet}
               classes={{
@@ -57,7 +57,7 @@ export const Header: React.FC<IHeader> = ({
             <BottomNavigationAction
               label={Tabs.Govern}
               value={Tabs.Govern}
-              icon={<FavoriteIcon fontSize='large' />}
+              icon={<AppsIcon fontSize='large' />}
               classes={{
                 root: classes.navigationTab,
                 selected: classes.navigationTabSelected,
