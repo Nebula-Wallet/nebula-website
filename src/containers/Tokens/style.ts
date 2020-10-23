@@ -25,6 +25,9 @@ const useStyles = makeStyles(() => ({
     paddingTop: 16,
     paddingLeft: 32,
     paddingRight: 32
+  },
+  balanceDiv: {
+    minWidth: 350
   }
 }))
 

@@ -35,6 +35,9 @@ const useStyles = makeStyles(() => ({
       backgroundColor: `${colors.purple.orchid}`,
       borderColor: colors.purple.orchid
     }
+  },
+  balanceDiv: {
+    minWidth: 350
   }
 }))
 

@@ -20,7 +20,7 @@ export const Tokens: React.FC = () => {
         <Grid item xs={12}>
           <Grid container className={classes.info}>
             <Grid item xs={12} className={classes.headers}>
-              <Grid container>
+              <Grid container style={{ flexWrap: 'nowrap' }}>
                 <Grid item xs={4}>
                   <Typography variant='body1' color='textPrimary'>
                     Account
@@ -31,7 +31,7 @@ export const Tokens: React.FC = () => {
                     Token
                   </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs className={classes.balanceDiv}>
                   <Typography variant='body1' color='textPrimary'>
                     Balance
                   </Typography>

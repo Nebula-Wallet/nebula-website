@@ -20,7 +20,7 @@ export const Token: React.FC<ISendMoneyModal> = ({ token }) => {
   const [open, setOpen] = useState(false)
   return (
     <Grid item xs={12} className={classes.tokenDiv}>
-      <Grid container alignItems='center'>
+      <Grid container alignItems='center' style={{ flexWrap: 'nowrap' }}>
         <Grid item xs={4}>
           <Typography variant='h6' color='textPrimary' className={classes.field}>
             {token.address}
@@ -31,7 +31,7 @@ export const Token: React.FC<ISendMoneyModal> = ({ token }) => {
             {token.programId}
           </Typography>
         </Grid>
-        <Grid item xs>
+        <Grid item xs className={classes.balanceDiv}>
           <Grid container alignItems='center' justify='space-between'>
             <Grid item xs={4}>
               <Typography variant='h5' color='textPrimary' className={classes.balance}>
