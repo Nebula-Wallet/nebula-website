@@ -13,6 +13,7 @@ import Notifier from '@containers/Notifier/Notifier'
 import { SnackbarProvider } from 'notistack'
 import CreateAccountModal from '@containers/Modals/CreateAccountModal'
 import CreateToken from '@containers/Modals/CreateToken'
+import GlobalLoader from '@containers/GlobalLoader/GlobalLoader'
 setConfig({
   reloadHooks: false
 })
@@ -27,6 +28,7 @@ const App: React.FC = () => {
             <Notifier />
             <CreateAccountModal />
             <CreateToken />
+            <GlobalLoader />
           </SnackbarProvider>
         </ThemeProvider>
       </PersistGate>
