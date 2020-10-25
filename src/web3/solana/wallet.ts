@@ -3,7 +3,9 @@ import { SolanaNetworks } from './connection'
 
 let _wallet: Account
 const TokenProgramMap: { [key in SolanaNetworks]: string } = {
-  [SolanaNetworks.DEV]: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+  [SolanaNetworks.DEV]: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  [SolanaNetworks.TEST]: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  [SolanaNetworks.MAIN]: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
 }
 const getSolanaWallet = async (): Promise<Account> => {
   if (_wallet) {

@@ -3,13 +3,16 @@ import React from 'react'
 import useStyles from './style'
 import SolanaIcon from '@static/svg/solana.svg'
 import CommonButton from '@components/CommonButton/CommonButton'
+import { SolanaNetworks } from '@web3/solana/connection'
 
 export interface IProps {
   address: string
   balance: number
   onSend: () => void
+  onAirdrop?: () => void
+  network: SolanaNetworks
 }
-export const Account: React.FC<IProps> = ({ address, balance, onSend }) => {
+export const Account: React.FC<IProps> = ({ address, balance, onSend, network, onAirdrop }) => {
   const classes = useStyles()
   return (
     <>
@@ -67,6 +70,15 @@ export const Account: React.FC<IProps> = ({ address, balance, onSend }) => {
                     </Grid>
                     <Grid item xs={12} className={classes.buttonDiv}>
                       <Grid container justify='flex-end'>
+                        {network !== SolanaNetworks.MAIN && (
+                          <Grid item>
+                            <CommonButton
+                              name='airdrop'
+                              className={classes.airdropButton}
+                              onClick={onAirdrop}
+                            />
+                          </Grid>
+                        )}
                         <Grid item>
                           <CommonButton name='send' onClick={onSend} />
                         </Grid>

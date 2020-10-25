@@ -37,7 +37,11 @@ export const defaultState: ISolanaWallet = {
   status: Status.Uninitialized,
   address: '',
   balance: 0,
-  governedTokens: { [SolanaNetworks.DEV]: [] },
+  governedTokens: {
+    [SolanaNetworks.DEV]: [],
+    [SolanaNetworks.MAIN]: [],
+    [SolanaNetworks.TEST]: []
+  },
   transactions: {},
   accounts: {}
 }
@@ -110,7 +114,8 @@ const solanaWalletSlice = createSlice({
       return state
     },
     // Triggers rescan for tokens that we control
-    rescanTokens() {}
+    rescanTokens() {},
+    airdrop() {}
   }
 })
 interface IsetTokenBalance {

@@ -170,6 +170,19 @@ export function* getToken(tokenAddress: string): SagaGenerator<Token> {
   )
   return token
 }
+
+export function* handleAirdrop(): Generator {
+  const connection = yield* call(getConnection)
+  const wallet = yield* call(getWallet)
+  yield* call([connection, connection.requestAirdrop], wallet.publicKey, 6.9 * 1e9)
+  yield put(
+    snackbarsActions.add({
+      message: 'You will soon receive airdrop',
+      variant: 'success',
+      persist: false
+    })
+  )
+}
 // export function* getTokenProgram(pubKey: PublicKey): SagaGenerator<number> {
 //   const connection = yield* call(getConnection)
 //   const balance = yield* call(, pubKey)
@@ -236,6 +249,9 @@ export function* init(): Generator {
   // yield* call(createAccount, '7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp')
 }
 
+export function* aridropSaga(): Generator {
+  yield takeLeading(actions.airdrop, handleAirdrop)
+}
 export function* rescanTokensSaga(): Generator {
   yield takeEvery(actions.rescanTokens, handleRescanTokens)
 }
@@ -246,5 +262,5 @@ export function* initSaga(): Generator {
   yield takeLeading(actions.initWallet, init)
 }
 export function* walletSaga(): Generator {
-  yield all([transactionsSaga, initSaga, rescanTokensSaga].map(spawn))
+  yield all([transactionsSaga, initSaga, rescanTokensSaga, aridropSaga].map(spawn))
 }

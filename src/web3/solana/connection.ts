@@ -1,7 +1,9 @@
 import { Connection } from '@solana/web3.js'
 
 enum SolanaNetworks {
-  DEV = 'http://devnet.solana.com'
+  DEV = 'http://devnet.solana.com',
+  TEST = 'http://testnet.solana.com',
+  MAIN = 'http://api.mainnet-beta.solana.com'
 }
 
 let _connection: Connection | null = null

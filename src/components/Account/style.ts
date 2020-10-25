@@ -50,6 +50,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   buttonDiv: {
     marginTop: 8,
     marginBottom: -8
+  },
+  airdropButton: {
+    color: colors.blue.light,
+    borderColor: colors.blue.light,
+    '&:hover': {
+      borderWidth: 2,
+      backgroundColor: `${colors.blue.light}`,
+      borderColor: colors.blue.light
+    },
+    marginRight: 16
   }
 }))
 
