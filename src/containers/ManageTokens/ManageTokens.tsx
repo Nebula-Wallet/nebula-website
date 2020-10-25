@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import useStyles from './style'
 import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
@@ -14,6 +14,11 @@ const ManageTokensPage: React.FC = () => {
   const tokens = useSelector(currentGovernedTokens)
   const dispatch = useDispatch()
   const [selectedToken, setSelectedToken] = useState(tokens[0] || null)
+  useEffect(() => {
+    if (tokens.length > 0 && selectedToken === null) {
+      setSelectedToken(tokens[0])
+    }
+  }, [tokens])
   return (
     <Grid container className={classes.contentContainer} justify='center'>
       <Grid item xs={12} className={classes.contentWrapper}>
