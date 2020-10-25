@@ -32,6 +32,9 @@ export const colors = {
   purple: {
     magenta: '#A1045A',
     orchid: '#AF69EF'
+  },
+  yellow: {
+    neon: '#F5D300'
   }
 }
 export const theme = createMuiTheme({

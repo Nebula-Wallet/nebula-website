@@ -48,6 +48,25 @@ const useStyles = makeStyles(() =>
         backgroundColor: `${colors.red.neon}`,
         borderColor: colors.red.neon
       }
+    },
+    noTokensDiv: {
+      marginTop: 72
+    },
+
+    rescanButton: {
+      color: colors.yellow.neon,
+      borderColor: colors.yellow.neon,
+      '&:hover': {
+        borderWidth: 2,
+        backgroundColor: `${colors.yellow.neon}`,
+        borderColor: colors.yellow.neon
+      }
+    },
+    noTokenActionsDiv: {
+      marginTop: 32
+    },
+    headerButtonDiv: {
+      marginRight: 32
     }
   })
 )

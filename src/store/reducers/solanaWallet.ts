@@ -108,7 +108,9 @@ const solanaWalletSlice = createSlice({
       )
       state.accounts[action.payload.programId][index].balance = action.payload.balance
       return state
-    }
+    },
+    // Triggers rescan for tokens that we control
+    rescanTokens() {}
   }
 })
 interface IsetTokenBalance {

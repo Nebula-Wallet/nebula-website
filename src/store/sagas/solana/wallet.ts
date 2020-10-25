@@ -16,6 +16,7 @@ import { Account, PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
 import { Token } from '@solana/spl-token'
 import { network } from '@selectors/solanaConnection'
 import { Status } from '@reducers/provider'
+import { actions as uiActions } from '@reducers/ui'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { actions as snackbarsActions } from '@reducers/snackbars'
 // import { createToken } from './token'
@@ -207,6 +208,11 @@ export function* createAccount(tokenAddress: string): SagaGenerator<string> {
   )
   return address.toString()
 }
+export function* handleRescanTokens(): Generator {
+  yield* put(uiActions.setLoader({ open: true, message: 'Rescaning Tokens' }))
+  yield* call(fetchGovernedTokens)
+  yield* put(uiActions.setLoader({ open: false, message: '' }))
+}
 
 export function* init(): Generator {
   yield put(actions.setStatus(Status.Init))
@@ -230,6 +236,9 @@ export function* init(): Generator {
   // yield* call(createAccount, '7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp')
 }
 
+export function* rescanTokensSaga(): Generator {
+  yield takeEvery(actions.rescanTokens, handleRescanTokens)
+}
 export function* transactionsSaga(): Generator {
   yield takeEvery(actions.addTransaction, handleTransaction)
 }
@@ -237,5 +246,5 @@ export function* initSaga(): Generator {
   yield takeLeading(actions.initWallet, init)
 }
 export function* walletSaga(): Generator {
-  yield all([transactionsSaga, initSaga].map(spawn))
+  yield all([transactionsSaga, initSaga, rescanTokensSaga].map(spawn))
 }
