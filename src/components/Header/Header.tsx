@@ -8,7 +8,7 @@ import AppsIcon from '@material-ui/icons/Apps'
 import useStyles from './style'
 export enum Tabs {
   Wallet = 'Wallet',
-  Govern = 'Govern'
+  ManageTokens = 'ManageTokens'
 }
 export interface IHeader {
   onClickLogo: () => void
@@ -55,8 +55,8 @@ export const Header: React.FC<IHeader> = ({
               }}
             />
             <BottomNavigationAction
-              label={Tabs.Govern}
-              value={Tabs.Govern}
+              label={'Manage'}
+              value={Tabs.ManageTokens}
               icon={<AppsIcon fontSize='large' />}
               classes={{
                 root: classes.navigationTab,

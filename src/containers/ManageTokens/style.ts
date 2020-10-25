@@ -36,6 +36,9 @@ const useStyles = makeStyles(() =>
     },
     iconSelect: {
       color: colors.green.main
+    },
+    tokenInfo: {
+      marginTop: 32
     }
   })
 )

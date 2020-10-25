@@ -15,7 +15,7 @@ import useStyles from './style'
 import WalletPage from '@containers/WalletPage/WalletPage'
 import { navigation } from '@selectors/ui'
 import { Tabs } from '@components/Header/Header'
-import GovernPage from '@containers/GovernPage/GovernPage'
+import ManageTokens from '@containers/ManageTokens/ManageTokens'
 
 const WelcomePage: React.FC = () => {
   const classes = useStyles()
@@ -32,8 +32,8 @@ const WelcomePage: React.FC = () => {
     switch (tab) {
       case Tabs.Wallet:
         return <WalletPage />
-      case Tabs.Govern:
-        return <GovernPage />
+      case Tabs.ManageTokens:
+        return <ManageTokens />
       default:
         return <WalletPage />
     }

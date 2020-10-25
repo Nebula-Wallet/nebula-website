@@ -4,11 +4,12 @@ import useStyles from './style'
 import { FormControl, Grid, InputLabel, Select, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { currentGovernedTokens } from '@selectors/solanaWallet'
+import TokenInfo from '@components/TokenInfo/TokenInfo'
 
-const GovernPage: React.FC = () => {
+const ManageTokensPage: React.FC = () => {
   const classes = useStyles()
   const tokens = useSelector(currentGovernedTokens)
-  const [selectedToken, setSelectedToken] = useState(tokens[0].programId)
+  const [selectedToken, setSelectedToken] = useState(tokens[0])
   return (
     <Grid container className={classes.contentContainer} justify='center'>
       <Grid item xs={12} className={classes.contentWrapper}>
@@ -23,9 +24,12 @@ const GovernPage: React.FC = () => {
               <InputLabel className={classes.selectLabel}>Selected token</InputLabel>
               <Select
                 native
-                value={selectedToken}
+                value={selectedToken.programId}
                 onChange={e => {
-                  setSelectedToken(e.target.value as string)
+                  const token = tokens.find(t => t.programId === (e.target.value as string))
+                  if (token) {
+                    setSelectedToken(token)
+                  }
                 }}
                 label='Selected token'
                 classes={{ icon: classes.iconSelect }}>
@@ -35,10 +39,20 @@ const GovernPage: React.FC = () => {
               </Select>
             </FormControl>
           </Grid>
+          <Grid item xs={12} className={classes.tokenInfo}>
+            <TokenInfo
+              address={selectedToken.programId}
+              freezeAuthority={selectedToken.freezeAuthority}
+              decimals={selectedToken.decimals}
+              mintAuthority={selectedToken.mintAuthority}
+              supply={selectedToken.supply}
+              onMint={() => {}}
+            />
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
   )
 }
 
-export default GovernPage
+export default ManageTokensPage
