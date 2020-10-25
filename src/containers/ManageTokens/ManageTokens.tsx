@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import useStyles from './style'
-import { FormControl, Grid, InputLabel, Select, Typography } from '@material-ui/core'
+import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { currentGovernedTokens } from '@selectors/solanaWallet'
 import { actions } from '@reducers/modals'
@@ -94,7 +94,6 @@ const ManageTokensPage: React.FC = () => {
                 <FormControl variant='outlined' className={classes.selectedTokenDiv}>
                   <InputLabel className={classes.selectLabel}>Selected token</InputLabel>
                   <Select
-                    native
                     value={selectedToken.programId}
                     onChange={e => {
                       const token = tokens.find(t => t.programId === (e.target.value as string))
@@ -103,9 +102,20 @@ const ManageTokensPage: React.FC = () => {
                       }
                     }}
                     label='Selected token'
+                    MenuProps={{ classes: { paper: classes.selectMenu } }}
                     classes={{ icon: classes.iconSelect }}>
                     {tokens.map(token => (
-                      <option value={token.programId}>{token.programId}</option>
+                      <MenuItem
+                        id={token.programId}
+                        value={token.programId}
+                        className={classes.optionDiv}>
+                        <Grid container justify='space-between' wrap='nowrap'>
+                          <Grid item xs={8} className={classes.address}>
+                            {token.programId}
+                          </Grid>
+                          <Grid item> Supply: {token.supply / 10 ** token.decimals} </Grid>
+                        </Grid>
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>

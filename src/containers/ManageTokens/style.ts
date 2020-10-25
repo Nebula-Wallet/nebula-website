@@ -67,6 +67,25 @@ const useStyles = makeStyles(() =>
     },
     headerButtonDiv: {
       marginRight: 32
+    },
+    optionDiv: {
+      // backgroundColor: `${colors.yellow.neon}`,
+      '&:hover': {
+        backgroundColor: `${colors.green.hover}`
+      }
+    },
+    selectMenu: {
+      backgroundColor: `${colors.black.light}`,
+      border: `2px solid ${colors.green.main}`,
+      maxHeight: 400
+    },
+    address: {
+      whiteSpace: 'nowrap',
+      textAlignLast: 'left',
+      display: 'block',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      textAlign: 'end'
     }
   })
 )
