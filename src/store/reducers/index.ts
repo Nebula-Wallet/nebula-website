@@ -7,6 +7,7 @@ import { reducer as snackbarsReducer, snackbarsSliceName } from './snackbars'
 import { reducer as solanaWalletReducer, solanaWalletSliceName } from './solanaWallet'
 import { reducer as solanaConnectionReducer, solanaConnectionSliceName } from './solanaConnection'
 import { reducer as uiReducer, uiSliceName } from './ui'
+import { reducer as modalsReducer, modalsSliceName } from './modals'
 
 const authPersistConfig = {
   key: solanaWalletSliceName,
@@ -19,6 +20,7 @@ const combinedReducers = combineReducers({
   [signerSliceName]: signerReducer,
   [snackbarsSliceName]: snackbarsReducer,
   [uiSliceName]: uiReducer,
+  [modalsSliceName]: modalsReducer,
   [solanaConnectionSliceName]: solanaConnectionReducer,
   [solanaWalletSliceName]: persistReducer(authPersistConfig, solanaWalletReducer)
 })

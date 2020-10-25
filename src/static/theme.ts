@@ -9,7 +9,8 @@ export const colors = {
   blue: {
     accent: '#072E5A',
     base: '#0B2545',
-    light: '#66AFF5'
+    light: '#66AFF5',
+    neon: '#08F7FE'
   },
   gray: {
     base: '#8DA9C4',
@@ -24,7 +25,8 @@ export const colors = {
     main: '#FFFFFF'
   },
   red: {
-    main: '#EB5757'
+    main: '#EB5757',
+    neon: '#FF2079'
   },
   purple: {
     magenta: '#A1045A',

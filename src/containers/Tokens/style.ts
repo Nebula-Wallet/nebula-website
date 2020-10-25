@@ -28,6 +28,16 @@ const useStyles = makeStyles(() => ({
   },
   balanceDiv: {
     minWidth: 350
+  },
+  addAccountButton: {
+    fontSize: 20,
+    color: colors.blue.neon,
+    borderColor: colors.blue.neon,
+    '&:hover': {
+      borderWidth: 2,
+      backgroundColor: `${colors.blue.neon}`,
+      borderColor: colors.blue.neon
+    }
   }
 }))
 

@@ -192,12 +192,12 @@ export function* sendToken(
   )
   return signature
 }
-export function* createAccount(tokenAddress: string): Generator {
+export function* createAccount(tokenAddress: string): SagaGenerator<string> {
   const token = yield* call(getToken, tokenAddress)
   const wallet = yield* call(getWallet)
 
   const address = yield* call([token, token.createAccount], wallet.publicKey)
-  yield put(
+  yield* put(
     actions.addTokenAccount({
       programId: tokenAddress,
       balance: 0,
@@ -205,6 +205,7 @@ export function* createAccount(tokenAddress: string): Generator {
       decimals: 9
     })
   )
+  return address.toString()
 }
 
 export function* init(): Generator {

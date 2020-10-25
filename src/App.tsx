@@ -11,6 +11,7 @@ import { persistStore } from 'redux-persist'
 import WelcomePage from '@containers/WelcomePage/WelcomePage'
 import Notifier from '@containers/Notifier/Notifier'
 import { SnackbarProvider } from 'notistack'
+import CreateAccountModal from '@containers/Modals/CreateAccountModal'
 setConfig({
   reloadHooks: false
 })
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           <SnackbarProvider maxSnack={99}>
             <WelcomePage />
             <Notifier />
+            <CreateAccountModal />
           </SnackbarProvider>
         </ThemeProvider>
       </PersistGate>

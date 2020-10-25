@@ -2,20 +2,36 @@
 import React from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import { accountsArray } from '@selectors/solanaWallet'
-import { useSelector } from 'react-redux'
+import { actions } from '@reducers/modals'
+import { useDispatch, useSelector } from 'react-redux'
 import useStyles from './style'
 import Token from './Token/Token'
+import CommonButton from '@components/CommonButton/CommonButton'
 
 export const Tokens: React.FC = () => {
   const classes = useStyles()
   const userTokens = useSelector(accountsArray)
+  const dispatch = useDispatch()
   return (
     <>
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.titleDiv}>
-          <Typography variant='h4' color='primary' className={classes.title}>
-            Your tokens
-          </Typography>
+          <Grid container justify='space-between' alignItems='center'>
+            <Grid item>
+              <Typography variant='h4' color='primary' className={classes.title}>
+                Your tokens
+              </Typography>
+            </Grid>
+            <Grid item>
+              <CommonButton
+                name='Add Account +'
+                className={classes.addAccountButton}
+                onClick={() => {
+                  dispatch(actions.openModal('createAccount'))
+                }}
+              />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Grid container className={classes.info}>
