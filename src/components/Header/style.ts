@@ -2,9 +2,14 @@ import { makeStyles } from '@material-ui/core/styles'
 import { colors } from '@static/theme'
 const useStyles = makeStyles(() => ({
   root: {
-    height: 110,
+    height: 80,
     paddingLeft: 25,
-    paddingRight: 25
+    paddingRight: 25,
+    // backgroundColor: colors.black.greyish,
+    borderBottom: `2px solid ${colors.green.hover}`
+  },
+  title: {
+    fontWeight: 'bold'
   },
   logo: {
     height: 36,
@@ -30,8 +35,7 @@ const useStyles = makeStyles(() => ({
   },
   navigationTab: {
     color: colors.gray.skeletonBackground,
-    width: 150,
-    height: 70
+    width: 150
   },
   navigationTabSelected: {
     color: colors.green.main,

@@ -4,7 +4,8 @@ export const colors = {
   black: {
     background: '#030313',
     light: '#090B1B',
-    kinda: '#1A1A1A'
+    kinda: '#1A1A1A',
+    greyish: '#081323'
   },
   blue: {
     accent: '#072E5A',

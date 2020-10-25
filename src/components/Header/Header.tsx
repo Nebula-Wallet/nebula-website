@@ -31,7 +31,7 @@ export const Header: React.FC<IHeader> = ({
       <Grid container className={classes.root} justify='space-between' alignItems='center'>
         <Grid item>
           {/* <SynthetifyIconHorizontal onClick={onClickLogo} /> */}
-          <Typography variant='h3' color='primary' onClick={onClickLogo}>
+          <Typography variant='h3' color='primary' className={classes.title} onClick={onClickLogo}>
             Nebula Wallet
           </Typography>
         </Grid>
