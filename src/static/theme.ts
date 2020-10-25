@@ -11,7 +11,8 @@ export const colors = {
     accent: '#072E5A',
     base: '#0B2545',
     light: '#66AFF5',
-    neon: '#08F7FE'
+    neon: '#08F7FE',
+    astel: '#48ADF1'
   },
   gray: {
     base: '#8DA9C4',
@@ -20,18 +21,21 @@ export const colors = {
   },
   green: {
     main: '#00F9BB',
-    hover: 'rgba(0,249,187,0.15)'
+    hover: 'rgba(0,249,187,0.15)',
+    pastel: '#8AF7E4'
   },
   white: {
     main: '#FFFFFF'
   },
   red: {
     main: '#EB5757',
-    neon: '#FF2079'
+    neon: '#FF2079',
+    pinkish: '#FE53BB'
   },
   purple: {
     magenta: '#A1045A',
-    orchid: '#AF69EF'
+    orchid: '#AF69EF',
+    pastel: '#C6BDEA'
   },
   yellow: {
     neon: '#F5D300'
@@ -83,18 +87,13 @@ export const theme = createMuiTheme({
     }
   },
   overrides: {
-    // Style sheet name ⚛️
     MuiInputBase: {
       input: {
         MozAppearance: 'textfield',
-        '& input::-webkit-clear-button, & input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+        '&::-webkit-clear-button, &::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
           display: 'none'
         }
       }
-      // Name of the rule
-      //  '& .MuiInputBase-input': {
-      //   MozAppearance: 'textfield'
-      // }
     }
   }
 })

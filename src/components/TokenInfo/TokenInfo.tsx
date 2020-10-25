@@ -106,7 +106,7 @@ export const TokenInfo: React.FC<IProps> = ({
                   <Grid item xs={12} className={classes.buttonDiv}>
                     <Grid container justify='flex-end'>
                       <Grid item>
-                        <CommonButton name='send' onClick={onMint} />
+                        <CommonButton name='Mint' className={classes.mintButton} onClick={onMint} />
                       </Grid>
                     </Grid>
                   </Grid>

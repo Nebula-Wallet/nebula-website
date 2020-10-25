@@ -17,9 +17,20 @@ export interface ICreateToken {
   error: string
   open: boolean
 }
+export interface IMintToken {
+  tokenAddress: string
+  recipient: string
+  txid: string
+  amount: number
+  decimals: number
+  sending: boolean
+  error: string
+  open: boolean
+}
 export interface IModals {
   createAccount: ICreateAccountTransaction
   createToken: ICreateToken
+  mintToken: IMintToken
 }
 
 export const defaultState: IModals = {
@@ -30,6 +41,16 @@ export const defaultState: IModals = {
     decimals: 0,
     freezeAuthority: '',
     mintAuthority: '',
+    error: '',
+    tokenAddress: ''
+  },
+  mintToken: {
+    open: false,
+    sending: false,
+    decimals: 0,
+    amount: 0,
+    recipient: '',
+    txid: '',
     error: '',
     tokenAddress: ''
   }
@@ -55,9 +76,34 @@ const modalsSlice = createSlice({
         case 'createToken':
           state.createToken = defaultState[action.payload]
           break
+        case 'mintToken':
+          state.mintToken = defaultState[action.payload]
+          break
         default:
           break
       }
+      return state
+    },
+    mintToken(state, action: PayloadAction<Pick<IMintToken, 'amount' | 'recipient'>>) {
+      state.mintToken.sending = true
+      state.mintToken.amount = action.payload.amount
+      state.mintToken.recipient = action.payload.recipient
+      return state
+    },
+    openMintToken(state, action: PayloadAction<Pick<IMintToken, 'tokenAddress' | 'decimals'>>) {
+      state.mintToken.decimals = action.payload.decimals
+      state.mintToken.tokenAddress = action.payload.tokenAddress
+      state.mintToken.open = true
+      return state
+    },
+    tokenMinted(state, action: PayloadAction<{ txid: string }>) {
+      state.mintToken.sending = false
+      state.mintToken.txid = action.payload.txid
+      return state
+    },
+    tokenMintedError(state, action: PayloadAction<{ error: string }>) {
+      state.mintToken.sending = false
+      state.mintToken.error = action.payload.error
       return state
     },
     createAccount(state, action: PayloadAction<{ tokenAddress: string }>) {

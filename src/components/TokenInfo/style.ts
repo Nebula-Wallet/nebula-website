@@ -34,8 +34,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginLeft: 25
   },
   buttonDiv: {
-    marginTop: 8,
+    marginTop: 24,
     marginBottom: -8
+  },
+  mintButton: {
+    color: colors.red.pinkish,
+    borderColor: colors.red.pinkish,
+    '&:hover': {
+      borderWidth: 2,
+      backgroundColor: `${colors.red.pinkish}`,
+      borderColor: colors.red.pinkish
+    }
   }
 }))
 

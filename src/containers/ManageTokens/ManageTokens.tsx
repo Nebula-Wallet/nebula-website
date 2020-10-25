@@ -15,8 +15,15 @@ const ManageTokensPage: React.FC = () => {
   const dispatch = useDispatch()
   const [selectedToken, setSelectedToken] = useState(tokens[0] || null)
   useEffect(() => {
-    if (tokens.length > 0 && selectedToken === null) {
-      setSelectedToken(tokens[0])
+    if (tokens.length > 0) {
+      if (selectedToken === null) {
+        setSelectedToken(tokens[0])
+      } else {
+        const tokenUpdated = tokens.find(token => token.programId === selectedToken.programId)
+        if (tokenUpdated) {
+          setSelectedToken(tokenUpdated)
+        }
+      }
     }
   }, [tokens])
   return (
@@ -132,7 +139,14 @@ const ManageTokensPage: React.FC = () => {
                   decimals={selectedToken.decimals}
                   mintAuthority={selectedToken.mintAuthority}
                   supply={selectedToken.supply}
-                  onMint={() => {}}
+                  onMint={() => {
+                    dispatch(
+                      actions.openMintToken({
+                        tokenAddress: selectedToken.programId,
+                        decimals: selectedToken.decimals
+                      })
+                    )
+                  }}
                 />
               </Grid>
             </>

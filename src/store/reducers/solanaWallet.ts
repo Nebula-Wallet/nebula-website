@@ -106,6 +106,21 @@ const solanaWalletSlice = createSlice({
       }
       return state
     },
+    increaseGovernedTokenSupply(
+      state,
+      action: PayloadAction<{
+        network: SolanaNetworks
+        tokenData: Pick<ITokenData, 'programId' | 'supply'>
+      }>
+    ) {
+      const index = state.governedTokens[action.payload.network].findIndex(
+        token => token.programId === action.payload.tokenData.programId
+      )
+      if (index !== -1) {
+        state.governedTokens[action.payload.network][index].supply += action.payload.tokenData.supply
+      }
+      return state
+    },
     setTokenBalance(state, action: PayloadAction<IsetTokenBalance>) {
       const index = state.accounts[action.payload.programId].findIndex(
         account => account.address === action.payload.address
