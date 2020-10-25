@@ -25,7 +25,7 @@ export const TokenInfo: React.FC<IProps> = ({
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.titleDiv}>
           <Typography variant='h4' color='primary' className={classes.title}>
-            TokenInfo
+            Token Info
           </Typography>
         </Grid>
         <Grid item xs={12}>

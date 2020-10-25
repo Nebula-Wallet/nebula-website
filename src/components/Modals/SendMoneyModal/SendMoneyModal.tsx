@@ -69,7 +69,7 @@ export const SendMoneyModal: React.FC<ISendMoneyModal> = ({
   }
   return (
     <Grid container>
-      <Dialog open={open} onClose={handleClose} className={classes.root}>
+      <Dialog open={open} onClose={handleClose} className={classes.root} keepMounted>
         <DialogTitle>
           <Grid container className={classes.titleWrapper}>
             <AttachMoneyIcon />
