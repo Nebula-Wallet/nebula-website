@@ -39,6 +39,15 @@ const useStyles = makeStyles(() =>
     },
     tokenInfo: {
       marginTop: 32
+    },
+    createTokenButton: {
+      color: colors.red.neon,
+      borderColor: colors.red.neon,
+      '&:hover': {
+        borderWidth: 2,
+        backgroundColor: `${colors.red.neon}`,
+        borderColor: colors.red.neon
+      }
     }
   })
 )

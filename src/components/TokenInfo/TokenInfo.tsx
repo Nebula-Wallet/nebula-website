@@ -56,7 +56,7 @@ export const TokenInfo: React.FC<IProps> = ({
                       </Grid>
                       <Grid item xs className={classes.addressDiv}>
                         <Typography variant='body1' color='textPrimary' className={classes.address}>
-                          {mintAuthority ?? '---'}
+                          {mintAuthority || '---'}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -70,7 +70,7 @@ export const TokenInfo: React.FC<IProps> = ({
                       </Grid>
                       <Grid item xs className={classes.addressDiv}>
                         <Typography variant='body1' color='textPrimary' className={classes.address}>
-                          {freezeAuthority ?? '---'}
+                          {freezeAuthority || '---'}
                         </Typography>
                       </Grid>
                     </Grid>

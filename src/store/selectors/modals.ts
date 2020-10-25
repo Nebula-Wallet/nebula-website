@@ -3,8 +3,8 @@ import { keySelectors, AnyProps } from './helpers'
 
 const store = (s: AnyProps) => s[modalsSliceName] as IModals
 
-export const { createAccount } = keySelectors(store, ['createAccount'])
+export const { createAccount, createToken } = keySelectors(store, ['createAccount', 'createToken'])
 
-export const modalsSelectors = { createAccount }
+export const modalsSelectors = { createAccount, createToken }
 
 export default modalsSelectors

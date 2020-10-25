@@ -20,17 +20,18 @@ import { PublicKey } from '@solana/web3.js'
 import CommonButton from '@components/CommonButton/CommonButton'
 import useStyles from './style'
 
-export interface ICreateAccountModal {
+export interface ICreateTokenModal {
   open: boolean
   loading: boolean
   handleClose: () => void
-  onSend: (tokenAddress: string) => void
+  onSend: (freezeAuthority: string, decimals: number) => void
   address?: string
 }
 export interface FormFields {
-  tokenAddress: string
+  freezeAuthority: string
+  decimals: number
 }
-export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
+export const CreateTokenModal: React.FC<ICreateTokenModal> = ({
   open,
   loading,
   handleClose,
@@ -39,28 +40,29 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
 }) => {
   const classes = useStyles()
   const schema = yup.object().shape({
-    tokenAddress: yup
-      .string()
-      .test('is-publicKey', 'Invalid Address', data => {
-        try {
-          new PublicKey(data)
-          return true
-        } catch (error) {
-          return false
-        }
-      })
-      .required('Provide token address.')
+    freezeAuthority: yup.string().test('is-publicKey', 'Invalid Address', data => {
+      if (data === '') {
+        return true
+      }
+      try {
+        new PublicKey(data)
+        return true
+      } catch (error) {
+        return false
+      }
+    }),
+    decimals: yup.number().min(0).max(18, 'Max decimals: 18').required('Decimals are required.')
   })
   const { control, errors, formState, reset, handleSubmit } = useForm<FormFields>({
     resolver: yupResolver(schema),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    defaultValues: { tokenAddress: '' },
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
+    defaultValues: { freezeAuthority: '', decimals: 9 },
     shouldFocusError: true
   })
 
   const clearAndSubmit = (data: FormFields) => {
-    onSend(data.tokenAddress)
+    onSend(data.freezeAuthority, data.decimals)
     reset()
   }
   return (
@@ -69,7 +71,7 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
         <DialogTitle>
           <Grid container className={classes.titleWrapper}>
             <AttachMoneyIcon />
-            <Typography variant='body1'>{'Create Account'}</Typography>
+            <Typography variant='body1'>{'Create Token'}</Typography>
             <CloseIcon onClick={handleClose} className={classes.close} />
           </Grid>
         </DialogTitle>
@@ -96,7 +98,7 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
             </Grid>
             <Grid item>
               <Typography variant='body2' className={classes.txid}>
-                Account address:
+                Token address:
               </Typography>
             </Grid>
             <Grid item>
@@ -121,19 +123,33 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
               <Grid item className={classes.inputDiv}>
                 <Controller
                   as={TextField}
-                  helperText={errors.tokenAddress?.message}
-                  error={!!errors.tokenAddress?.message}
+                  helperText={errors.freezeAuthority?.message}
+                  error={!!errors.freezeAuthority?.message}
                   className={classes.input}
                   id='outlined-search'
-                  label='Token Address'
+                  label='Freeze Authority'
                   type='text'
-                  name='tokenAddress'
+                  name='freezeAuthority'
+                  variant='outlined'
+                  control={control}
+                />
+              </Grid>
+              <Grid item className={classes.inputDiv}>
+                <Controller
+                  as={TextField}
+                  helperText={errors.decimals?.message}
+                  error={!!errors.decimals?.message}
+                  className={classes.input}
+                  id='outlined-search'
+                  label='Token decimals'
+                  type='number'
+                  name='decimals'
                   variant='outlined'
                   control={control}
                 />
               </Grid>
               <Grid item>
-                <CommonButton disabled={!formState.isValid} name='Create Account' />
+                <CommonButton disabled={!formState.isValid} name='Create Token' />
               </Grid>
             </Grid>
           </form>
@@ -142,4 +158,4 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
     </Grid>
   )
 }
-export default CreateAccountModal
+export default CreateTokenModal

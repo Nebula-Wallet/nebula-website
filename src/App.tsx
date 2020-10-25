@@ -12,6 +12,7 @@ import WelcomePage from '@containers/WelcomePage/WelcomePage'
 import Notifier from '@containers/Notifier/Notifier'
 import { SnackbarProvider } from 'notistack'
 import CreateAccountModal from '@containers/Modals/CreateAccountModal'
+import CreateToken from '@containers/Modals/CreateToken'
 setConfig({
   reloadHooks: false
 })
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             <WelcomePage />
             <Notifier />
             <CreateAccountModal />
+            <CreateToken />
           </SnackbarProvider>
         </ThemeProvider>
       </PersistGate>

@@ -8,14 +8,31 @@ export interface ICreateAccountTransaction {
   error: string
   open: boolean
 }
+export interface ICreateToken {
+  tokenAddress: string
+  freezeAuthority: string
+  mintAuthority: string
+  decimals: number
+  sending: boolean
+  error: string
+  open: boolean
+}
 export interface IModals {
   createAccount: ICreateAccountTransaction
-  aaa: ICreateAccountTransaction
+  createToken: ICreateToken
 }
 
 export const defaultState: IModals = {
   createAccount: { open: false, sending: false, accountAddress: '', error: '', tokenAddress: '' },
-  aaa: { open: false, sending: false, accountAddress: '', error: '', tokenAddress: '' }
+  createToken: {
+    open: false,
+    sending: false,
+    decimals: 0,
+    freezeAuthority: '',
+    mintAuthority: '',
+    error: '',
+    tokenAddress: ''
+  }
 }
 export const modalsSliceName = 'modals'
 const modalsSlice = createSlice({
@@ -31,7 +48,16 @@ const modalsSlice = createSlice({
       return state
     },
     resetModal(state, action: PayloadAction<keyof IModals>) {
-      state[action.payload] = defaultState[action.payload]
+      switch (action.payload) {
+        case 'createAccount':
+          state.createAccount = defaultState[action.payload]
+          break
+        case 'createToken':
+          state.createToken = defaultState[action.payload]
+          break
+        default:
+          break
+      }
       return state
     },
     createAccount(state, action: PayloadAction<{ tokenAddress: string }>) {
@@ -48,28 +74,23 @@ const modalsSlice = createSlice({
       state.createAccount.sending = false
       state.createAccount.error = action.payload.error
       return state
+    },
+    createToken(state, action: PayloadAction<{ freezeAuthority: string, decimals: number }>) {
+      state.createToken.sending = true
+      state.createToken.freezeAuthority = action.payload.freezeAuthority
+      state.createToken.decimals = action.payload.decimals
+      return state
+    },
+    tokenCreated(state, action: PayloadAction<{ tokenAddress: string }>) {
+      state.createToken.sending = false
+      state.createToken.tokenAddress = action.payload.tokenAddress
+      return state
+    },
+    tokenCreatedError(state, action: PayloadAction<{ error: string }>) {
+      state.createToken.sending = false
+      state.createToken.error = action.payload.error
+      return state
     }
-
-    // addTransaction(state, action: PayloadAction<IaddTransaction>) {
-    //   state.transactions[action.payload.id] = {
-    //     recipient: action.payload.recipient,
-    //     amount: action.payload.amount,
-    //     txid: '',
-    //     sending: true,
-    //     token: action.payload.token
-    //   }
-    //   return state
-    // },
-    // setTransactionTxid(state, action: PayloadAction<{ txid: string; id: string }>) {
-    //   state.transactions[action.payload.id].txid = action.payload.txid
-    //   state.transactions[action.payload.id].sending = false
-    //   return state
-    // },
-    // setTransactionError(state, action: PayloadAction<{ error: string; id: string }>) {
-    //   state.transactions[action.payload.id].error = action.payload.error
-    //   state.transactions[action.payload.id].sending = false
-    //   return state
-    // }
   }
 })
 export const actions = modalsSlice.actions

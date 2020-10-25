@@ -78,5 +78,20 @@ export const theme = createMuiTheme({
     h6: {
       fontSize: 12
     }
+  },
+  overrides: {
+    // Style sheet name ⚛️
+    MuiInputBase: {
+      input: {
+        MozAppearance: 'textfield',
+        '& input::-webkit-clear-button, & input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+          display: 'none'
+        }
+      }
+      // Name of the rule
+      //  '& .MuiInputBase-input': {
+      //   MozAppearance: 'textfield'
+      // }
+    }
   }
 })
