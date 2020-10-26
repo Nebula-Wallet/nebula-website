@@ -9,6 +9,7 @@ import { network } from '@selectors/solanaConnection'
 import { Connection } from '@solana/web3.js'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { init } from './wallet'
+import { Tabs } from '@components/Header/Header'
 
 export function* getConnection(): SagaGenerator<Connection> {
   const currentNetwork = yield* select(network)
@@ -47,6 +48,7 @@ export function* handleNetworkChange(action: PayloadAction<PayloadTypes['setNetw
       message: `Loading ${networkToName(action.payload)} wallet.`
     })
   )
+  yield* put(uiActions.setNavigation(Tabs.Wallet))
   yield* put(solanaWalletActions.resetState())
   yield* call(init)
   yield* put(
