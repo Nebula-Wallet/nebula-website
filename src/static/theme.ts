@@ -39,6 +39,11 @@ export const colors = {
   },
   yellow: {
     neon: '#F5D300'
+  },
+  orange: {
+    main: '#FFA500',
+    gold: '#FFD700',
+    tomato: '#FF6347'
   }
 }
 export const theme = createMuiTheme({

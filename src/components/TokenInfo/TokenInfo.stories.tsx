@@ -14,5 +14,11 @@ storiesOf('ui/TokenInfo', module)
       onMint={() => {
         console.log('TokenInfo mint')
       }}
+      onThaw={() => {
+        console.log('TokenInfo mint')
+      }}
+      onFreeze={() => {
+        console.log('TokenInfo freeze')
+      }}
     />
   ))

@@ -27,10 +27,28 @@ export interface IMintToken {
   error: string
   open: boolean
 }
+export interface IFreezeAccount {
+  tokenAddress: string
+  accountToFreeze: string
+  txid: string
+  sending: boolean
+  error: string
+  open: boolean
+}
+export interface IThawAccount {
+  tokenAddress: string
+  accountToThaw: string
+  txid: string
+  sending: boolean
+  error: string
+  open: boolean
+}
 export interface IModals {
   createAccount: ICreateAccountTransaction
   createToken: ICreateToken
   mintToken: IMintToken
+  freezeAccount: IFreezeAccount
+  thawAccount: IThawAccount
 }
 
 export const defaultState: IModals = {
@@ -50,6 +68,22 @@ export const defaultState: IModals = {
     decimals: 0,
     amount: 0,
     recipient: '',
+    txid: '',
+    error: '',
+    tokenAddress: ''
+  },
+  freezeAccount: {
+    open: false,
+    sending: false,
+    accountToFreeze: '',
+    txid: '',
+    error: '',
+    tokenAddress: ''
+  },
+  thawAccount: {
+    open: false,
+    sending: false,
+    accountToThaw: '',
     txid: '',
     error: '',
     tokenAddress: ''
@@ -79,9 +113,55 @@ const modalsSlice = createSlice({
         case 'mintToken':
           state.mintToken = defaultState[action.payload]
           break
+        case 'freezeAccount':
+          state.freezeAccount = defaultState[action.payload]
+          break
+        case 'thawAccount':
+          state.thawAccount = defaultState[action.payload]
+          break
         default:
           break
       }
+      return state
+    },
+    thawAccount(state, action: PayloadAction<Pick<IThawAccount, 'accountToThaw'>>) {
+      state.thawAccount.sending = true
+      state.thawAccount.accountToThaw = action.payload.accountToThaw
+      return state
+    },
+    openThawAccount(state, action: PayloadAction<Pick<IThawAccount, 'tokenAddress' >>) {
+      state.thawAccount.tokenAddress = action.payload.tokenAddress
+      state.thawAccount.open = true
+      return state
+    },
+    accountThawed(state, action: PayloadAction<{ txid: string }>) {
+      state.thawAccount.sending = false
+      state.thawAccount.txid = action.payload.txid
+      return state
+    },
+    accountThawedError(state, action: PayloadAction<{ error: string }>) {
+      state.thawAccount.sending = false
+      state.thawAccount.error = action.payload.error
+      return state
+    },
+    freezeAccount(state, action: PayloadAction<Pick<IFreezeAccount, 'accountToFreeze'>>) {
+      state.freezeAccount.sending = true
+      state.freezeAccount.accountToFreeze = action.payload.accountToFreeze
+      return state
+    },
+    openFreezeAccount(state, action: PayloadAction<Pick<IFreezeAccount, 'tokenAddress' >>) {
+      state.freezeAccount.tokenAddress = action.payload.tokenAddress
+      state.freezeAccount.open = true
+      return state
+    },
+    accountFrozen(state, action: PayloadAction<{ txid: string }>) {
+      state.freezeAccount.sending = false
+      state.freezeAccount.txid = action.payload.txid
+      return state
+    },
+    accountFrozenError(state, action: PayloadAction<{ error: string }>) {
+      state.freezeAccount.sending = false
+      state.freezeAccount.error = action.payload.error
       return state
     },
     mintToken(state, action: PayloadAction<Pick<IMintToken, 'amount' | 'recipient'>>) {

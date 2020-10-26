@@ -6,7 +6,7 @@ import { actions as snackbarsActions } from '@reducers/snackbars'
 import { actions as walletActions } from '@reducers/solanaWallet'
 import modalsSelectors from '@selectors/modals'
 import { createAccount } from './solana/wallet'
-import { createToken, mintToken } from './solana/token'
+import { createToken, freezeAccount, mintToken, thawAccount } from './solana/token'
 import { network } from '@selectors/solanaConnection'
 
 export function* handleCreateAccount(
@@ -100,9 +100,66 @@ export function* handleMintToken(action: PayloadAction<PayloadTypes['mintToken']
     )
   }
 }
+export function* handleFreezeAccount(
+  action: PayloadAction<PayloadTypes['freezeAccount']>
+): Generator {
+  try {
+    const mintTokenData = yield* select(modalsSelectors.freezeAccount)
+    yield* call(freezeAccount, mintTokenData.tokenAddress, action.payload.accountToFreeze)
+    yield* put(
+      actions.accountFrozen({
+        txid: 'Account has been frozen.'
+      })
+    )
+  } catch (error) {
+    yield put(
+      snackbarsActions.add({
+        message: 'Failed to send. Please try again.',
+        variant: 'error',
+        persist: false
+      })
+    )
+    yield put(
+      actions.accountFrozenError({
+        error: error
+      })
+    )
+  }
+}
 
+export function* handleThawAccount(action: PayloadAction<PayloadTypes['thawAccount']>): Generator {
+  try {
+    const thawAccountData = yield* select(modalsSelectors.thawAccount)
+    yield* call(thawAccount, thawAccountData.tokenAddress, action.payload.accountToThaw)
+    yield* put(
+      actions.accountThawed({
+        txid: 'Account has been unfrozen.'
+      })
+    )
+  } catch (error) {
+    yield put(
+      snackbarsActions.add({
+        message: 'Failed to send. Please try again.',
+        variant: 'error',
+        persist: false
+      })
+    )
+    yield put(
+      actions.accountThawedError({
+        error: error
+      })
+    )
+  }
+}
+
+export function* thawAccountAction(): Generator {
+  yield takeEvery(actions.thawAccount, handleThawAccount)
+}
 export function* createAccountAction(): Generator {
   yield takeEvery(actions.createAccount, handleCreateAccount)
+}
+export function* freezeAccountAction(): Generator {
+  yield takeEvery(actions.freezeAccount, handleFreezeAccount)
 }
 export function* mintTokenAction(): Generator {
   yield takeEvery(actions.mintToken, handleMintToken)
@@ -111,5 +168,13 @@ export function* createTokenAction(): Generator {
   yield takeEvery(actions.createToken, handleCreateToken)
 }
 export function* modalsSaga(): Generator {
-  yield all([createAccountAction, createTokenAction, mintTokenAction].map(spawn))
+  yield all(
+    [
+      createAccountAction,
+      createTokenAction,
+      mintTokenAction,
+      freezeAccountAction,
+      thawAccountAction
+    ].map(spawn)
+  )
 }

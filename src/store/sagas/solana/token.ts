@@ -71,6 +71,36 @@ export function* mintToken(tokenAddress: string, recipient: string, amount: numb
   yield* call([token, token.mintTo], new PublicKey(recipient), wallet, [], amount)
 }
 
+export function* freezeAccount(tokenAddress: string, accountToFreeze: string): Generator {
+  const wallet = yield* call(getWallet)
+  const connection = yield* call(getConnection)
+  const currentNetwork = yield* select(network)
+  const token = new Token(
+    connection,
+    new PublicKey(tokenAddress),
+    new PublicKey(TokenProgramMap[currentNetwork]),
+    wallet
+  )
+  // This should return txid in future
+  // @ts-expect-error
+  yield* call([token, token.freezeAccount], new PublicKey(accountToFreeze), wallet, [])
+}
+
+export function* thawAccount(tokenAddress: string, accountToThaw: string): Generator {
+  const wallet = yield* call(getWallet)
+  const connection = yield* call(getConnection)
+  const currentNetwork = yield* select(network)
+  const token = new Token(
+    connection,
+    new PublicKey(tokenAddress),
+    new PublicKey(TokenProgramMap[currentNetwork]),
+    wallet
+  )
+  // This should return txid in future
+  // @ts-expect-error
+  yield* call([token, token.thawAccount], new PublicKey(accountToThaw), wallet, [])
+}
+
 // export function* createToken(): Generator {
 //   yield takeEvery(actions.addTransaction, init)
 // }

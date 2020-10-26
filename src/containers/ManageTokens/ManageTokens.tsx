@@ -147,6 +147,20 @@ const ManageTokensPage: React.FC = () => {
                       })
                     )
                   }}
+                  onFreeze={() => {
+                    dispatch(
+                      actions.openFreezeAccount({
+                        tokenAddress: selectedToken.programId
+                      })
+                    )
+                  }}
+                  onThaw={() => {
+                    dispatch(
+                      actions.openThawAccount({
+                        tokenAddress: selectedToken.programId
+                      })
+                    )
+                  }}
                 />
               </Grid>
             </>

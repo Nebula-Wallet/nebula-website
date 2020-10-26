@@ -45,6 +45,24 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: `${colors.red.pinkish}`,
       borderColor: colors.red.pinkish
     }
+  },
+  freezeButton: {
+    color: colors.white.main,
+    borderColor: colors.white.main,
+    '&:hover': {
+      borderWidth: 2,
+      backgroundColor: `${colors.white.main}`,
+      borderColor: colors.white.main
+    }
+  },
+  thawButton: {
+    color: colors.orange.tomato,
+    borderColor: colors.orange.tomato,
+    '&:hover': {
+      borderWidth: 2,
+      backgroundColor: `${colors.orange.tomato}`,
+      borderColor: colors.orange.tomato
+    }
   }
 }))
 

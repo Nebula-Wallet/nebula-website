@@ -10,6 +10,8 @@ export interface IProps {
   freezeAuthority: string | null
   decimals: number
   onMint: () => void
+  onFreeze: () => void
+  onThaw: () => void
 }
 export const TokenInfo: React.FC<IProps> = ({
   address,
@@ -17,7 +19,9 @@ export const TokenInfo: React.FC<IProps> = ({
   mintAuthority,
   freezeAuthority,
   decimals,
-  onMint
+  onMint,
+  onFreeze,
+  onThaw
 }) => {
   const classes = useStyles()
   return (
@@ -104,7 +108,21 @@ export const TokenInfo: React.FC<IProps> = ({
                     </Grid>
                   </Grid>
                   <Grid item xs={12} className={classes.buttonDiv}>
-                    <Grid container justify='flex-end'>
+                    <Grid container justify='flex-end' spacing={2}>
+                      <Grid item>
+                        <CommonButton
+                          name='Thaw'
+                          className={classes.thawButton}
+                          onClick={onThaw}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <CommonButton
+                          name='Freeze'
+                          className={classes.freezeButton}
+                          onClick={onFreeze}
+                        />
+                      </Grid>
                       <Grid item>
                         <CommonButton name='Mint' className={classes.mintButton} onClick={onMint} />
                       </Grid>
