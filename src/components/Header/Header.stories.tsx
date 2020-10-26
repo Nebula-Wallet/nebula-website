@@ -2,15 +2,17 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import Header, { Tabs } from './Header'
 import { withKnobs } from '@storybook/addon-knobs'
+import { SolanaNetworks } from '@web3/solana/connection'
 
-storiesOf('Containers/Header', module)
+storiesOf('ui/Header', module)
   .addDecorator(withKnobs)
   .add('default', () => {
     const [tab, setTab] = React.useState(Tabs.Wallet)
     return (
       <Header
         onClickLogo={() => {}}
-        onConnectWallet={() => {}}
+        network={SolanaNetworks.DEV}
+        onNetworkClick={() => {}}
         currentNavigation={tab}
         onNavigationChange={setTab}
       />
@@ -21,10 +23,10 @@ storiesOf('Containers/Header', module)
     return (
       <Header
         onClickLogo={() => {}}
-        onConnectWallet={() => {}}
+        onNetworkClick={() => {}}
         currentNavigation={tab}
+        network={SolanaNetworks.MAIN}
         onNavigationChange={setTab}
-        address='123'
       />
     )
   })

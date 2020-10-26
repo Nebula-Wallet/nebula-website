@@ -1,11 +1,15 @@
-import { call, put, SagaGenerator, select, takeLeading } from 'typed-redux-saga'
+import { all, call, put, SagaGenerator, select, takeLeading, spawn } from 'typed-redux-saga'
 
-import { actions, Status } from '@reducers/solanaConnection'
+import { actions, Status, PayloadTypes } from '@reducers/solanaConnection'
 import { actions as solanaWalletActions } from '@reducers/solanaWallet'
-import { getSolanaConnection } from '@web3/solana/connection'
+import { actions as uiActions } from '@reducers/ui'
+import { getSolanaConnection, networkToName } from '@web3/solana/connection'
 import { actions as snackbarsActions } from '@reducers/snackbars'
 import { network } from '@selectors/solanaConnection'
 import { Connection } from '@solana/web3.js'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { init } from './wallet'
+
 export function* getConnection(): SagaGenerator<Connection> {
   const currentNetwork = yield* select(network)
   const connection = yield* call(getSolanaConnection, currentNetwork)
@@ -36,6 +40,36 @@ export function* initConnection(): Generator {
   }
 }
 
-export function* connectionSaga(): Generator {
+export function* handleNetworkChange(action: PayloadAction<PayloadTypes['setNetwork']>): Generator {
+  yield* put(
+    uiActions.setLoader({
+      open: true,
+      message: `Loading ${networkToName(action.payload)} wallet.`
+    })
+  )
+  yield* put(solanaWalletActions.resetState())
+  yield* call(init)
+  yield* put(
+    uiActions.setLoader({
+      open: false,
+      message: ''
+    })
+  )
+  yield* put(
+    snackbarsActions.add({
+      message: `You are on ${networkToName(action.payload)} network.`,
+      variant: 'info',
+      persist: false
+    })
+  )
+}
+
+export function* networkChangeSaga(): Generator {
+  yield takeLeading(actions.setNetwork, handleNetworkChange)
+}
+export function* initConnectionSaga(): Generator {
   yield takeLeading(actions.initSolanaConnection, initConnection)
+}
+export function* connectionSaga(): Generator {
+  yield* all([networkChangeSaga, initConnectionSaga].map(spawn))
 }

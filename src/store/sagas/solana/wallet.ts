@@ -142,7 +142,7 @@ export function* fetchGovernedTokens(): Generator {
   for (const acc of info) {
     // @ts-expect-error
     const data = acc.account.data.parsed.info as ITokenInfo
-    if (data.mintAuthority === wallet.publicKey.toString()) {
+    if (data.mintAuthority === wallet.publicKey.toString() || data.freezeAuthority === wallet.publicKey.toString()) {
       yield put(
         actions.addGovernedToken({
           network: currentNetwork,

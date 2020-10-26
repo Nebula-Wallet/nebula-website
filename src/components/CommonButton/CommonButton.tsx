@@ -9,13 +9,15 @@ export interface IProps {
   className?: string
   color?: PropTypes.Color
   disabled?: boolean
+  startIcon?: JSX.Element
 }
 export const CommonButton: React.FC<IProps> = ({
   name,
   onClick,
   className,
   color = 'primary',
-  disabled = false
+  disabled = false,
+  startIcon
 }) => {
   const classes = useStyles()
   return (
@@ -26,6 +28,7 @@ export const CommonButton: React.FC<IProps> = ({
       classes={{ disabled: classes.disabled }}
       disabled={disabled}
       type={onClick ? 'button' : 'submit'}
+      startIcon={startIcon}
       onClick={onClick}>
       {name}
     </Button>

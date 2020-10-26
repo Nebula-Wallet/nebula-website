@@ -50,6 +50,9 @@ const solanaWalletSlice = createSlice({
   name: solanaWalletSliceName,
   initialState: defaultState,
   reducers: {
+    resetState() {
+      return defaultState
+    },
     initWallet(state) {
       return state
     },

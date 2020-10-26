@@ -5,7 +5,21 @@ enum SolanaNetworks {
   TEST = 'http://testnet.solana.com',
   MAIN = 'http://api.mainnet-beta.solana.com'
 }
+export const networkToName = (network: SolanaNetworks) => {
+  switch (network) {
+    case SolanaNetworks.DEV:
+      return 'Devnet'
 
+    case SolanaNetworks.TEST:
+      return 'Testnet'
+
+    case SolanaNetworks.MAIN:
+      return 'Mainnet'
+
+    default:
+      return 'DEVNET'
+  }
+}
 let _connection: Connection | null = null
 let _network: SolanaNetworks
 
