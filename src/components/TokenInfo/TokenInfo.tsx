@@ -7,6 +7,7 @@ export interface IProps {
   address: string
   supply: number
   mintAuthority: string | null
+  userAddress: string
   freezeAuthority: string | null
   decimals: number
   onMint: () => void
@@ -21,7 +22,8 @@ export const TokenInfo: React.FC<IProps> = ({
   decimals,
   onMint,
   onFreeze,
-  onThaw
+  onThaw,
+  userAddress
 }) => {
   const classes = useStyles()
   return (
@@ -109,23 +111,33 @@ export const TokenInfo: React.FC<IProps> = ({
                   </Grid>
                   <Grid item xs={12} className={classes.buttonDiv}>
                     <Grid container justify='flex-end' spacing={2}>
-                      <Grid item>
-                        <CommonButton
-                          name='Thaw'
-                          className={classes.thawButton}
-                          onClick={onThaw}
-                        />
-                      </Grid>
-                      <Grid item>
-                        <CommonButton
-                          name='Freeze'
-                          className={classes.freezeButton}
-                          onClick={onFreeze}
-                        />
-                      </Grid>
-                      <Grid item>
-                        <CommonButton name='Mint' className={classes.mintButton} onClick={onMint} />
-                      </Grid>
+                      {userAddress === freezeAuthority && (
+                        <Grid item>
+                          <CommonButton
+                            name='Thaw'
+                            className={classes.thawButton}
+                            onClick={onThaw}
+                          />
+                        </Grid>
+                      )}
+                      {userAddress === freezeAuthority && (
+                        <Grid item>
+                          <CommonButton
+                            name='Freeze'
+                            className={classes.freezeButton}
+                            onClick={onFreeze}
+                          />
+                        </Grid>
+                      )}
+                      {userAddress === mintAuthority && (
+                        <Grid item>
+                          <CommonButton
+                            name='Mint'
+                            className={classes.mintButton}
+                            onClick={onMint}
+                          />
+                        </Grid>
+                      )}
                     </Grid>
                   </Grid>
                 </Grid>

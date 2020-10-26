@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import useStyles from './style'
 import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
-import { currentGovernedTokens } from '@selectors/solanaWallet'
+import { address, currentGovernedTokens } from '@selectors/solanaWallet'
 import { actions } from '@reducers/modals'
 import { actions as walletActions } from '@reducers/solanaWallet'
 import TokenInfo from '@components/TokenInfo/TokenInfo'
@@ -12,6 +12,7 @@ import CommonButton from '@components/CommonButton/CommonButton'
 const ManageTokensPage: React.FC = () => {
   const classes = useStyles()
   const tokens = useSelector(currentGovernedTokens)
+  const userAddress = useSelector(address)
   const dispatch = useDispatch()
   const [selectedToken, setSelectedToken] = useState(tokens[0] || null)
   useEffect(() => {
@@ -139,6 +140,7 @@ const ManageTokensPage: React.FC = () => {
                   decimals={selectedToken.decimals}
                   mintAuthority={selectedToken.mintAuthority}
                   supply={selectedToken.supply}
+                  userAddress={userAddress}
                   onMint={() => {
                     dispatch(
                       actions.openMintToken({
