@@ -13,6 +13,8 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import AppsIcon from '@material-ui/icons/Apps'
 import { networkToName, SolanaNetworks } from '@web3/solana/connection'
 import BlurOnIcon from '@material-ui/icons/BlurOn'
+import NebulaIcon from '@static/svg/nebula.svg'
+
 import useStyles from './style'
 
 export enum Tabs {
@@ -39,10 +41,22 @@ export const Header: React.FC<IHeader> = ({
     <>
       <Grid container className={classes.root} justify='space-between' alignItems='center'>
         <Grid item>
+          <Grid container alignItems='center' className={classes.logoDiv} onClick={onClickLogo}>
+            <Grid item>
+            {/* // Artist: https://www.flaticon.com/authors/photo3idea-studio */}
+              <img src={NebulaIcon} alt='' className={classes.nebulaLogo} />
+            </Grid>
+            <Grid item>
+              <Typography
+                variant='h3'
+                color='primary'
+                className={classes.title}
+                >
+                Nebula Wallet
+              </Typography>
+            </Grid>
+          </Grid>
           {/* <SynthetifyIconHorizontal onClick={onClickLogo} /> */}
-          <Typography variant='h3' color='primary' className={classes.title} onClick={onClickLogo}>
-            Nebula Wallet
-          </Typography>
         </Grid>
         <Grid item>
           <BottomNavigation

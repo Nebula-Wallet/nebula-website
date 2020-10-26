@@ -9,7 +9,10 @@ const useStyles = makeStyles(() => ({
     borderBottom: `2px solid ${colors.green.hover}`
   },
   title: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    background: 'linear-gradient(90deg, rgba(65,223,208,1) 0%, rgba(238,131,239,1) 100%);',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent'
   },
   logo: {
     height: 36,
@@ -88,6 +91,14 @@ const useStyles = makeStyles(() => ({
     textTransform: 'none',
     transition: '500ms',
     borderRadius: 10
+  },
+  nebulaLogo: {
+    width: 40,
+    marginRight: 16,
+    marginTop: 4
+  },
+  logoDiv: {
+    cursor: 'pointer'
   }
 }))
 
