@@ -60,6 +60,16 @@ const useStyles = makeStyles((theme: Theme) => ({
       borderColor: colors.blue.light
     },
     marginRight: 16
+  },
+  registerButton: {
+    fontSize: 20,
+    color: colors.purple.pastel,
+    borderColor: colors.purple.pastel,
+    '&:hover': {
+      borderWidth: 2,
+      backgroundColor: `${colors.purple.pastel}`,
+      borderColor: colors.purple.pastel
+    }
   }
 }))
 

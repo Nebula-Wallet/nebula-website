@@ -13,6 +13,7 @@ storiesOf('ui/Account', module)
       onSend={() => {
         console.log('account send')
       }}
+      name={'Test'}
     />
   ))
   .add('testnet', () => (
@@ -23,5 +24,6 @@ storiesOf('ui/Account', module)
       onSend={() => {
         console.log('account send')
       }}
+      name={undefined}
     />
   ))

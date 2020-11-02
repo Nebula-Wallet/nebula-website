@@ -6,11 +6,13 @@ import { balance, address } from '@selectors/solanaWallet'
 import { actions } from '@reducers/solanaWallet'
 import SendMoneyModal from '@containers/Modals/SendMoneyModal'
 import { network } from '@selectors/solanaConnection'
+import { myName } from '@selectors/nameService'
 
 export const AccountWrapper: React.FC = () => {
   const userAddress = useSelector(address)
   const userBalance = useSelector(balance)
   const currentNetwork = useSelector(network)
+  const name = useSelector(myName)
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
   return (
@@ -25,6 +27,7 @@ export const AccountWrapper: React.FC = () => {
         network={currentNetwork}
         address={userAddress}
         balance={userBalance}
+        name={name}
         onSend={() => {
           setOpen(true)
         }}

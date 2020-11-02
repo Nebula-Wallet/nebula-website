@@ -4,9 +4,10 @@ import { Grid, Typography } from '@material-ui/core'
 import { accountsArray } from '@selectors/solanaWallet'
 import { actions } from '@reducers/modals'
 import { useDispatch, useSelector } from 'react-redux'
-import useStyles from './style'
 import Token from './Token/Token'
 import CommonButton from '@components/CommonButton/CommonButton'
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
+import useStyles from './style'
 
 export const Tokens: React.FC = () => {
   const classes = useStyles()
@@ -24,11 +25,12 @@ export const Tokens: React.FC = () => {
             </Grid>
             <Grid item>
               <CommonButton
-                name='Add Account +'
+                name='Add Account'
                 className={classes.addAccountButton}
                 onClick={() => {
                   dispatch(actions.openModal('createAccount'))
                 }}
+                startIcon={<PlaylistAddIcon style={{ fontSize: 27 }} />}
               />
             </Grid>
           </Grid>

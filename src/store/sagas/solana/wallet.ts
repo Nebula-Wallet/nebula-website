@@ -19,6 +19,7 @@ import { Status } from '@reducers/provider'
 import { actions as uiActions } from '@reducers/ui'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { actions as snackbarsActions } from '@reducers/snackbars'
+import { fetchRegisteredAddresses } from './nameService'
 // import { createToken } from './token'
 
 export function* getWallet(): SagaGenerator<Account> {
@@ -142,7 +143,10 @@ export function* fetchGovernedTokens(): Generator {
   for (const acc of info) {
     // @ts-expect-error
     const data = acc.account.data.parsed.info as ITokenInfo
-    if (data.mintAuthority === wallet.publicKey.toString() || data.freezeAuthority === wallet.publicKey.toString()) {
+    if (
+      data.mintAuthority === wallet.publicKey.toString() ||
+      data.freezeAuthority === wallet.publicKey.toString()
+    ) {
       yield put(
         actions.addGovernedToken({
           network: currentNetwork,
@@ -236,6 +240,7 @@ export function* init(): Generator {
   yield put(actions.setAddress(wallet.publicKey.toString()))
   yield put(actions.setBalance(balance))
   yield put(actions.setStatus(Status.Initalized))
+  yield* call(fetchRegisteredAddresses)
   // const address = yield* call(fetchGovernedTokens)
   // const address = yield* call(getTokenDetails)
   // console.log(address)

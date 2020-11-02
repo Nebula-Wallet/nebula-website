@@ -4,23 +4,49 @@ import useStyles from './style'
 import SolanaIcon from '@static/svg/solana.svg'
 import CommonButton from '@components/CommonButton/CommonButton'
 import { SolanaNetworks } from '@web3/solana/connection'
-
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 export interface IProps {
   address: string
   balance: number
   onSend: () => void
   onAirdrop?: () => void
   network: SolanaNetworks
+  name: string | undefined
 }
-export const Account: React.FC<IProps> = ({ address, balance, onSend, network, onAirdrop }) => {
+export const Account: React.FC<IProps> = ({
+  address,
+  balance,
+  onSend,
+  network,
+  onAirdrop,
+  name
+}) => {
   const classes = useStyles()
   return (
     <>
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.titleDiv}>
-          <Typography variant='h4' color='primary' className={classes.title}>
-            Account
-          </Typography>
+          <Grid container justify='space-between' alignItems='center'>
+            <Grid item>
+              <Typography variant='h4' color='primary' className={classes.title}>
+                Account
+              </Typography>
+            </Grid>
+            <Grid item>
+              {name ? (
+                <Typography variant='h4' color='textPrimary'>
+                  Your alias: {name}
+                </Typography>
+              ) : (
+                <CommonButton
+                  name='Register alias'
+                  className={classes.registerButton}
+                  onClick={() => {}}
+                  startIcon={<VerifiedUserIcon style={{ fontSize: 27 }} />}
+                />
+              )}
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Grid container className={classes.info}>

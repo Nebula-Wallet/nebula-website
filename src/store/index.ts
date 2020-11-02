@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { applyMiddleware, compose, createStore, Store } from 'redux'
+import { applyMiddleware, createStore, Store } from '@reduxjs/toolkit'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import { middleware, sagaMiddleware } from './middleware'
 import combinedReducers from './reducers'
 import rootSaga from './sagas'
-
 declare global {
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R
@@ -12,7 +12,7 @@ declare global {
 type AppStore = Store<unknown, any>
 
 const configureStore = (initialState = {}): AppStore => {
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?? compose
+  const composeEnhancers = composeWithDevTools({ serialize: true })
   const store = createStore(
     combinedReducers,
     initialState,
