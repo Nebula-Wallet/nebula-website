@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-import useStyles from './style'
 import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { address, currentGovernedTokens } from '@selectors/solanaWallet'
@@ -8,6 +7,9 @@ import { actions } from '@reducers/modals'
 import { actions as walletActions } from '@reducers/solanaWallet'
 import TokenInfo from '@components/TokenInfo/TokenInfo'
 import CommonButton from '@components/CommonButton/CommonButton'
+import RotateLeftIcon from '@material-ui/icons/RotateLeft'
+import NoteAddIcon from '@material-ui/icons/NoteAdd'
+import useStyles from './style'
 
 const ManageTokensPage: React.FC = () => {
   const classes = useStyles()
@@ -47,6 +49,7 @@ const ManageTokensPage: React.FC = () => {
                       onClick={() => {
                         dispatch(walletActions.rescanTokens())
                       }}
+                      startIcon={<RotateLeftIcon style={{ fontSize: 27 }} />}
                     />
                   </Grid>
                   <Grid item>
@@ -56,6 +59,7 @@ const ManageTokensPage: React.FC = () => {
                       onClick={() => {
                         dispatch(actions.openModal('createToken'))
                       }}
+                      startIcon={<NoteAddIcon style={{ fontSize: 27 }} />}
                     />
                   </Grid>
                 </Grid>
@@ -76,24 +80,31 @@ const ManageTokensPage: React.FC = () => {
                       Try rescaning network or create new token.
                     </Typography>
                   </Grid>
-                  <Grid item>
-                    <Grid container spacing={4} wrap='nowrap' className={classes.noTokenActionsDiv}>
-                      <Grid item xs>
+                  <Grid item style={{ width: '100%' }}>
+                    <Grid
+                      container
+                      spacing={4}
+                      wrap='nowrap'
+                      justify='center'
+                      className={classes.noTokenActionsDiv}>
+                      <Grid item>
                         <CommonButton
                           name='Rescan Tokens'
                           className={classes.rescanButton}
                           onClick={() => {
                             dispatch(walletActions.rescanTokens())
                           }}
+                          startIcon={<RotateLeftIcon style={{ fontSize: 45 }} />}
                         />
                       </Grid>
-                      <Grid item xs>
+                      <Grid item>
                         <CommonButton
                           name='Create Token'
                           className={classes.createTokenButton}
                           onClick={() => {
                             dispatch(actions.openModal('createToken'))
                           }}
+                          startIcon={<NoteAddIcon style={{ fontSize: 45 }} />}
                         />
                       </Grid>
                     </Grid>

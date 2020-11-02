@@ -1,8 +1,10 @@
 import { Grid, Typography } from '@material-ui/core'
 import React from 'react'
-import useStyles from './style'
 import CommonButton from '@components/CommonButton/CommonButton'
-
+import AcUnitIcon from '@material-ui/icons/AcUnit'
+import OpacityIcon from '@material-ui/icons/Opacity'
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance'
+import useStyles from './style'
 export interface IProps {
   address: string
   supply: number
@@ -117,6 +119,7 @@ export const TokenInfo: React.FC<IProps> = ({
                             name='Thaw'
                             className={classes.thawButton}
                             onClick={onThaw}
+                            startIcon={<OpacityIcon style={{ fontSize: 24 }} />}
                           />
                         </Grid>
                       )}
@@ -126,6 +129,7 @@ export const TokenInfo: React.FC<IProps> = ({
                             name='Freeze'
                             className={classes.freezeButton}
                             onClick={onFreeze}
+                            startIcon={<AcUnitIcon style={{ fontSize: 24 }} />}
                           />
                         </Grid>
                       )}
@@ -135,6 +139,7 @@ export const TokenInfo: React.FC<IProps> = ({
                             name='Mint'
                             className={classes.mintButton}
                             onClick={onMint}
+                            startIcon={<AccountBalanceIcon style={{ fontSize: 24 }} />}
                           />
                         </Grid>
                       )}

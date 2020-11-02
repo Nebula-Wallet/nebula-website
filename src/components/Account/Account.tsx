@@ -5,6 +5,8 @@ import SolanaIcon from '@static/svg/solana.svg'
 import CommonButton from '@components/CommonButton/CommonButton'
 import { SolanaNetworks } from '@web3/solana/connection'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
+import NearMeIcon from '@material-ui/icons/NearMe'
+import FlightIcon from '@material-ui/icons/Flight'
 export interface IProps {
   address: string
   balance: number
@@ -102,11 +104,16 @@ export const Account: React.FC<IProps> = ({
                               name='airdrop'
                               className={classes.airdropButton}
                               onClick={onAirdrop}
+                              startIcon={<FlightIcon style={{ fontSize: 24 }} />}
                             />
                           </Grid>
                         )}
                         <Grid item>
-                          <CommonButton name='send' onClick={onSend} />
+                          <CommonButton
+                            name='send'
+                            onClick={onSend}
+                            startIcon={<NearMeIcon style={{ fontSize: 24 }} />}
+                          />
                         </Grid>
                       </Grid>
                     </Grid>
