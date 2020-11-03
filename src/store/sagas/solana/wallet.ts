@@ -12,7 +12,13 @@ import {
 import { actions, PayloadTypes } from '@reducers/solanaWallet'
 import { getConnection } from './connection'
 import { getSolanaWallet, TokenProgramMap } from '@web3/solana/wallet'
-import { Account, PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
+import {
+  Account,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  sendAndConfirmTransaction
+} from '@solana/web3.js'
 import { Token } from '@solana/spl-token'
 import { network } from '@selectors/solanaConnection'
 import { Status } from '@reducers/provider'
@@ -20,6 +26,7 @@ import { actions as uiActions } from '@reducers/ui'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { actions as snackbarsActions } from '@reducers/snackbars'
 import { fetchRegisteredAddresses } from './nameService'
+import { balance } from '@selectors/solanaWallet'
 // import { createToken } from './token'
 
 export function* getWallet(): SagaGenerator<Account> {
@@ -54,19 +61,25 @@ export function* handleTransaction(
       )
     } else {
       // Send SOL
+      const blockHash = yield* call([connection, connection.getRecentBlockhash])
+      const myBalance = yield* select(balance)
+      let amountToSend = 0
+      if (myBalance <= action.payload.amount * 1e9 + blockHash.feeCalculator.lamportsPerSignature) {
+        amountToSend = myBalance - blockHash.feeCalculator.lamportsPerSignature
+      } else {
+        amountToSend = action.payload.amount * 1e9
+      }
       const signature = yield* call(
-        [connection, connection.sendTransaction],
+        sendAndConfirmTransaction,
+        connection,
         new Transaction().add(
           SystemProgram.transfer({
             fromPubkey: wallet.publicKey,
             toPubkey: new PublicKey(action.payload.recipient),
-            lamports: action.payload.amount * 1e9
+            lamports: amountToSend
           })
         ),
-        [wallet],
-        {
-          preflightCommitment: 'singleGossip'
-        }
+        [wallet]
       )
       yield put(
         actions.setTransactionTxid({
@@ -74,6 +87,9 @@ export function* handleTransaction(
           id: action.payload.id
         })
       )
+      // Just to make sure we update balance
+      const updatedBalance = yield* call(getBalance, wallet.publicKey)
+      yield put(actions.setBalance(updatedBalance))
     }
   } catch (error) {
     yield put(
