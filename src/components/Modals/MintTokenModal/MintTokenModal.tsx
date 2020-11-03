@@ -13,11 +13,11 @@ import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers'
 
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import CloseIcon from '@material-ui/icons/Close'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import { PublicKey } from '@solana/web3.js'
 import CommonButton from '@components/CommonButton/CommonButton'
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance'
 import useStyles from './style'
 
 export interface IMintTokenModal {
@@ -73,7 +73,7 @@ export const MintTokenModal: React.FC<IMintTokenModal> = ({
       <Dialog open={open} onClose={handleClose} className={classes.root}>
         <DialogTitle>
           <Grid container className={classes.titleWrapper}>
-            <AttachMoneyIcon />
+            <AccountBalanceIcon />
             <Typography variant='body1'>{'Mint Token'}</Typography>
             <CloseIcon onClick={handleClose} className={classes.close} />
           </Grid>
@@ -152,7 +152,11 @@ export const MintTokenModal: React.FC<IMintTokenModal> = ({
                 />
               </Grid>
               <Grid item>
-                <CommonButton disabled={!formState.isValid} name='Mint Token' />
+                <CommonButton
+                  disabled={!formState.isValid}
+                  name='Mint Token'
+                  className={classes.button}
+                />
               </Grid>
             </Grid>
           </form>

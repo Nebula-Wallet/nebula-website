@@ -13,7 +13,7 @@ import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers'
 
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
+import AcUnitIcon from '@material-ui/icons/AcUnit'
 import CloseIcon from '@material-ui/icons/Close'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import { PublicKey } from '@solana/web3.js'
@@ -68,7 +68,7 @@ export const FreezeAccountModal: React.FC<IFreezeAccountModal> = ({
       <Dialog open={open} onClose={handleClose} className={classes.root}>
         <DialogTitle>
           <Grid container className={classes.titleWrapper}>
-            <AttachMoneyIcon />
+            <AcUnitIcon />
             <Typography variant='body1'>{'Freeze Account'}</Typography>
             <CloseIcon onClick={handleClose} className={classes.close} />
           </Grid>
@@ -133,7 +133,11 @@ export const FreezeAccountModal: React.FC<IFreezeAccountModal> = ({
                 />
               </Grid>
               <Grid item>
-                <CommonButton disabled={!formState.isValid} name='Freeze Account' />
+                <CommonButton
+                  disabled={!formState.isValid}
+                  name='Freeze Account'
+                  className={classes.button}
+                />
               </Grid>
             </Grid>
           </form>

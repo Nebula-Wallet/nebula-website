@@ -149,7 +149,11 @@ export const CreateTokenModal: React.FC<ICreateTokenModal> = ({
                 />
               </Grid>
               <Grid item>
-                <CommonButton disabled={!formState.isValid} name='Create Token' />
+                <CommonButton
+                  disabled={!formState.isValid}
+                  name='Create Token'
+                  className={classes.button}
+                />
               </Grid>
             </Grid>
           </form>

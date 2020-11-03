@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       padding: 10,
       height: 300,
       width: 430,
-      background: colors.green.main
+      background: colors.white.main
     }
   },
   titleWrapper: {
@@ -36,43 +36,45 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   progress: {
     marginBottom: 16,
-    color: colors.green.main
+    color: colors.white.main
   },
   input: {
     '& .MuiInputLabel-outlined': {
-      color: theme.palette.primary.main
+      color: colors.white.main
     },
     '& .MuiFormLabel-root.Mui-error': {
       color: colors.red.main
     },
     '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'rgba(0,249,187,0.25)'
+      borderColor: colors.white.main
     },
-    '& input::-webkit-clear-button, & input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
-      display: 'none'
-    },
-    '& .MuiInputBase-input': {
-      MozAppearance: 'textfield'
+    '& .MuiOutlinedInput-root': {
+      borderColor: colors.white.main,
+      '&.Mui-focused fieldset': {
+        borderColor: colors.white.main
+      }
     }
   },
   inputDiv: {
     minHeight: 100,
     position: 'relative'
   },
-  maxBalance: {
-    position: 'absolute',
-    right: 0,
-    top: 65,
-    color: theme.palette.primary.main,
-    cursor: 'pointer'
-  },
   txid: {
     wordBreak: 'break-all',
     textAlign: 'center'
   },
   successIcon: {
-    color: theme.palette.primary.main,
+    color: colors.white.main,
     fontSize: 120
+  },
+  button: {
+    color: colors.white.main,
+    borderColor: colors.white.main,
+    '&:hover': {
+      borderWidth: 2,
+      backgroundColor: `${colors.white.main}`,
+      borderColor: colors.white.main
+    }
   }
 }))
 

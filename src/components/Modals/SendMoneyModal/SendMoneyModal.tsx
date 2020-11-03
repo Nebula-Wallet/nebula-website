@@ -13,7 +13,7 @@ import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers'
 
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
+import NearMeIcon from '@material-ui/icons/NearMe'
 import CloseIcon from '@material-ui/icons/Close'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import { PublicKey } from '@solana/web3.js'
@@ -72,7 +72,7 @@ export const SendMoneyModal: React.FC<ISendMoneyModal> = ({
       <Dialog open={open} onClose={handleClose} className={classes.root} keepMounted>
         <DialogTitle>
           <Grid container className={classes.titleWrapper}>
-            <AttachMoneyIcon />
+            <NearMeIcon />
             <Typography variant='body1'>{'Send Money'}</Typography>
             <CloseIcon onClick={handleClose} className={classes.close} />
           </Grid>

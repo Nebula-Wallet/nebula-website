@@ -133,7 +133,11 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
                 />
               </Grid>
               <Grid item>
-                <CommonButton disabled={!formState.isValid} name='Create Account' />
+                <CommonButton
+                  disabled={!formState.isValid}
+                  name='Create Account'
+                  className={classes.button}
+                />
               </Grid>
             </Grid>
           </form>

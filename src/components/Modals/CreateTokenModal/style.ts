@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       padding: 10,
       height: 400,
       width: 430,
-      background: colors.green.main
+      background: colors.red.neon
     }
   },
   titleWrapper: {
@@ -36,17 +36,23 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   progress: {
     marginBottom: 16,
-    color: colors.green.main
+    color: colors.red.neon
   },
   input: {
     '& .MuiInputLabel-outlined': {
-      color: theme.palette.primary.main
+      color: colors.red.neon
     },
     '& .MuiFormLabel-root.Mui-error': {
       color: colors.red.main
     },
     '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'rgba(0,249,187,0.25)'
+      borderColor: colors.red.neon
+    },
+    '& .MuiOutlinedInput-root': {
+      borderColor: colors.red.neon,
+      '&.Mui-focused fieldset': {
+        borderColor: colors.red.neon
+      }
     }
   },
   inputDiv: {
@@ -58,8 +64,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'center'
   },
   successIcon: {
-    color: theme.palette.primary.main,
+    color: colors.red.neon,
     fontSize: 120
+  },
+  button: {
+    fontSize: 20,
+    color: colors.red.neon,
+    borderColor: colors.red.neon,
+    '&:hover': {
+      borderWidth: 2,
+      backgroundColor: `${colors.red.neon}`,
+      borderColor: colors.red.neon
+    }
   }
 }))
 

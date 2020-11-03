@@ -13,11 +13,12 @@ import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers'
 
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import CloseIcon from '@material-ui/icons/Close'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import { PublicKey } from '@solana/web3.js'
 import CommonButton from '@components/CommonButton/CommonButton'
+import OpacityIcon from '@material-ui/icons/Opacity'
+
 import useStyles from './style'
 
 export interface IThawAccountModal {
@@ -68,7 +69,7 @@ export const ThawAccountModal: React.FC<IThawAccountModal> = ({
       <Dialog open={open} onClose={handleClose} className={classes.root}>
         <DialogTitle>
           <Grid container className={classes.titleWrapper}>
-            <AttachMoneyIcon />
+            <OpacityIcon />
             <Typography variant='body1'>{'Unfreeze Account'}</Typography>
             <CloseIcon onClick={handleClose} className={classes.close} />
           </Grid>
@@ -133,7 +134,11 @@ export const ThawAccountModal: React.FC<IThawAccountModal> = ({
                 />
               </Grid>
               <Grid item>
-                <CommonButton disabled={!formState.isValid} name='Unfreeze Account' />
+                <CommonButton
+                  disabled={!formState.isValid}
+                  name='Unfreeze Account'
+                  className={classes.button}
+                />
               </Grid>
             </Grid>
           </form>

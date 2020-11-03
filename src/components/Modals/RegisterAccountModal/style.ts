@@ -43,10 +43,16 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: colors.purple.pastel
     },
     '& .MuiFormLabel-root.Mui-error': {
-      color: `${colors.red.main} !important`
+      color: `${colors.red.main} `
+    },
+    '& .MuiOutlinedInput-root': {
+      borderColor: `${colors.purple.pastel}`,
+      '&.Mui-focused fieldset': {
+        borderColor: colors.purple.pastel
+      }
     },
     '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: `${colors.purple.pastel} !important`
+      borderColor: `${colors.purple.pastel}`
     }
   },
   inputDiv: {

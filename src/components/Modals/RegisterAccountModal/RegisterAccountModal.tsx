@@ -13,7 +13,7 @@ import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers'
 
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import CloseIcon from '@material-ui/icons/Close'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import CommonButton from '@components/CommonButton/CommonButton'
@@ -57,7 +57,7 @@ export const RegisterAccountModal: React.FC<IRegisterAccountModal> = ({
       <Dialog open={open} onClose={handleClose} className={classes.root}>
         <DialogTitle>
           <Grid container className={classes.titleWrapper}>
-            <AttachMoneyIcon />
+            <VerifiedUserIcon />
             <Typography variant='body1'>{'Register Account'}</Typography>
             <CloseIcon onClick={handleClose} className={classes.close} />
           </Grid>
