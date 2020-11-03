@@ -13,6 +13,9 @@ storiesOf('ui/Account', module)
       onSend={() => {
         console.log('account send')
       }}
+      onRegister={() => {
+        console.log('onRegister')
+      }}
       name={'Test'}
     />
   ))
@@ -23,6 +26,9 @@ storiesOf('ui/Account', module)
       network={SolanaNetworks.TEST}
       onSend={() => {
         console.log('account send')
+      }}
+      onRegister={() => {
+        console.log('onRegister')
       }}
       name={undefined}
     />

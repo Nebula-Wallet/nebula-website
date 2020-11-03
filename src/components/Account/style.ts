@@ -70,6 +70,12 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: `${colors.purple.pastel}`,
       borderColor: colors.purple.pastel
     }
+  },
+  nickname: {
+    fontWeight: 'bold',
+    background: 'linear-gradient(90deg, rgba(65,223,208,1) 0%, rgba(238,131,239,1) 100%);',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent'
   }
 }))
 

@@ -1,18 +1,23 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { IAddressRecord, actions } from '@reducers/nameService'
 import { network } from '@selectors/solanaConnection'
-import { PublicKey } from '@solana/web3.js'
-import { SolanaNetworks } from '@web3/solana/connection'
+import {
+  PublicKey,
+  sendAndConfirmTransaction,
+  Transaction,
+  TransactionInstruction
+} from '@solana/web3.js'
 import { parseUserRegisterData } from '@web3/solana/data'
-import { call, put, select } from 'typed-redux-saga'
+import {
+  AccountNameServiceMap,
+  CounterPointerAddressMap,
+  CounterAddressMap,
+  PAYMENT_ACCOUNT_ADDRESS
+} from '@web3/solana/static'
+import { call, put, SagaGenerator, select } from 'typed-redux-saga'
 
 import { getConnection } from './connection'
-
-export const AccountNameServiceMap: { [key in SolanaNetworks]: string } = {
-  [SolanaNetworks.DEV]: '3pheqxp6nsXKEZKaBvH6Gd7gVimkE9KBVT8naYY1KMJn',
-  [SolanaNetworks.TEST]: '3pheqxp6nsXKEZKaBvH6Gd7gVimkE9KBVT8naYY1KMJn',
-  [SolanaNetworks.MAIN]: '3pheqxp6nsXKEZKaBvH6Gd7gVimkE9KBVT8naYY1KMJn'
-}
+import { getWallet } from './wallet'
 
 export function* fetchRegisteredAddresses(): Generator {
   const connection = yield* call(getConnection)
@@ -35,20 +40,50 @@ export function* fetchRegisteredAddresses(): Generator {
     }
   }
   yield* put(actions.addAccounts(accountsMaping))
-  // yield* put(uiActions.setNavigation(Tabs.Wallet))
-  // yield* put(solanaWalletActions.resetState())
-  // yield* call(init)
-  // yield* put(
-  //   uiActions.setLoader({
-  //     open: false,
-  //     message: ''
-  //   })
-  // )
-  // yield* put(
-  //   snackbarsActions.add({
-  //     message: `You are on ${networkToName(action.payload)} network.`,
-  //     variant: 'info',
-  //     persist: false
-  //   })
-  // )
+}
+interface IRegisterAccount {
+  name: string
+  account: PublicKey
+  storageAccount: PublicKey
+}
+export function* registerAccount({
+  name,
+  account,
+  storageAccount
+}: IRegisterAccount): SagaGenerator<string> {
+  const connection = yield* call(getConnection)
+  const wallet = yield* call(getWallet)
+  const currentNetwork = yield* select(network)
+  const nameToRegister = Buffer.alloc(32)
+  nameToRegister.write(name)
+  const instructionData = Buffer.concat([account.toBuffer(), nameToRegister])
+  const instruction = new TransactionInstruction({
+    keys: [
+      // This account must match one in smartcontract
+      { pubkey: new PublicKey(PAYMENT_ACCOUNT_ADDRESS), isSigner: false, isWritable: true },
+      // This account must match one in smartcontract
+      {
+        pubkey: new PublicKey(CounterPointerAddressMap[currentNetwork]),
+        isSigner: false,
+        isWritable: true
+      },
+      // This account must match one in smartcontract
+      {
+        pubkey: new PublicKey(CounterAddressMap[currentNetwork]),
+        isSigner: false,
+        isWritable: true
+      },
+      { pubkey: storageAccount, isSigner: false, isWritable: true }
+    ],
+    programId: new PublicKey(AccountNameServiceMap[currentNetwork]),
+    data: instructionData
+  })
+  const txid = yield* call(
+    sendAndConfirmTransaction,
+    connection,
+    new Transaction().add(instruction),
+    [wallet],
+    { commitment: 'singleGossip' }
+  )
+  return txid
 }

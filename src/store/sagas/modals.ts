@@ -5,9 +5,13 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { actions as snackbarsActions } from '@reducers/snackbars'
 import { actions as walletActions } from '@reducers/solanaWallet'
 import modalsSelectors from '@selectors/modals'
-import { createAccount } from './solana/wallet'
+import { createAccount, getWallet } from './solana/wallet'
 import { createToken, freezeAccount, mintToken, thawAccount } from './solana/token'
 import { network } from '@selectors/solanaConnection'
+import { createCleanAccount, sendSol } from './solana/utils'
+import { AccountNameServiceMap, ACCOUNT_NAME_STORAGE_SIZE } from '@web3/solana/static'
+import { PublicKey } from '@solana/web3.js'
+import { registerAccount } from './solana/nameService'
 
 export function* handleCreateAccount(
   action: PayloadAction<PayloadTypes['createAccount']>
@@ -151,9 +155,68 @@ export function* handleThawAccount(action: PayloadAction<PayloadTypes['thawAccou
     )
   }
 }
+export function* handleRegisterAccount(
+  action: PayloadAction<PayloadTypes['registerAccount']>
+): Generator {
+  try {
+    const currentNetwork = yield* select(network)
+    yield* put(
+      actions.updateRegisterAccount({
+        sending: true,
+        message: 'Creating storage account.'
+      })
+    )
+    const storageAccount = yield* call(
+      createCleanAccount,
+      ACCOUNT_NAME_STORAGE_SIZE,
+      new PublicKey(AccountNameServiceMap[currentNetwork])
+    )
+    yield* put(
+      actions.updateRegisterAccount({
+        sending: true,
+        message: 'Transfering fee.'
+      })
+    )
+    yield* call(sendSol, 1, storageAccount)
+    yield* put(
+      actions.updateRegisterAccount({
+        sending: true,
+        message: 'Registering name.'
+      })
+    )
+    const wallet = yield* call(getWallet)
+    const txid = yield* call(registerAccount, {
+      name: action.payload.name,
+      account: wallet.publicKey,
+      storageAccount
+    })
+    yield* put(
+      actions.updateRegisterAccount({
+        sending: false,
+        message: `Success Txid: ${txid}`
+      })
+    )
+  } catch (error) {
+    yield put(
+      snackbarsActions.add({
+        message: 'Failed to send. Please try again.',
+        variant: 'error',
+        persist: false
+      })
+    )
+    yield put(
+      actions.registerAccountError({
+        error: error
+      })
+    )
+  }
+}
 
 export function* thawAccountAction(): Generator {
   yield takeEvery(actions.thawAccount, handleThawAccount)
+}
+export function* registerAccountAction(): Generator {
+  yield takeEvery(actions.registerAccount, handleRegisterAccount)
 }
 export function* createAccountAction(): Generator {
   yield takeEvery(actions.createAccount, handleCreateAccount)
@@ -174,7 +237,8 @@ export function* modalsSaga(): Generator {
       createTokenAction,
       mintTokenAction,
       freezeAccountAction,
-      thawAccountAction
+      thawAccountAction,
+      registerAccountAction
     ].map(spawn)
   )
 }

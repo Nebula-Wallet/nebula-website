@@ -43,12 +43,20 @@ export interface IThawAccount {
   error: string
   open: boolean
 }
+export interface IRegisterAccount {
+  name: string
+  message: string
+  sending: boolean
+  error: string
+  open: boolean
+}
 export interface IModals {
   createAccount: ICreateAccountTransaction
   createToken: ICreateToken
   mintToken: IMintToken
   freezeAccount: IFreezeAccount
   thawAccount: IThawAccount
+  registerAccount: IRegisterAccount
 }
 
 export const defaultState: IModals = {
@@ -87,6 +95,13 @@ export const defaultState: IModals = {
     txid: '',
     error: '',
     tokenAddress: ''
+  },
+  registerAccount: {
+    open: false,
+    sending: false,
+    name: '',
+    message: '',
+    error: ''
   }
 }
 export const modalsSliceName = 'modals'
@@ -119,9 +134,30 @@ const modalsSlice = createSlice({
         case 'thawAccount':
           state.thawAccount = defaultState[action.payload]
           break
+        case 'registerAccount':
+          state.registerAccount = defaultState[action.payload]
+          break
         default:
           break
       }
+      return state
+    },
+    registerAccount(state, action: PayloadAction<Pick<IRegisterAccount, 'name'>>) {
+      state.registerAccount.sending = true
+      state.registerAccount.name = action.payload.name
+      return state
+    },
+    updateRegisterAccount(
+      state,
+      action: PayloadAction<Pick<IRegisterAccount, 'sending' | 'message'>>
+    ) {
+      state.registerAccount.sending = action.payload.sending
+      state.registerAccount.message = action.payload.message
+      return state
+    },
+    registerAccountError(state, action: PayloadAction<{ error: string }>) {
+      state.registerAccount.sending = false
+      state.registerAccount.error = action.payload.error
       return state
     },
     thawAccount(state, action: PayloadAction<Pick<IThawAccount, 'accountToThaw'>>) {
@@ -129,7 +165,7 @@ const modalsSlice = createSlice({
       state.thawAccount.accountToThaw = action.payload.accountToThaw
       return state
     },
-    openThawAccount(state, action: PayloadAction<Pick<IThawAccount, 'tokenAddress' >>) {
+    openThawAccount(state, action: PayloadAction<Pick<IThawAccount, 'tokenAddress'>>) {
       state.thawAccount.tokenAddress = action.payload.tokenAddress
       state.thawAccount.open = true
       return state
@@ -149,7 +185,7 @@ const modalsSlice = createSlice({
       state.freezeAccount.accountToFreeze = action.payload.accountToFreeze
       return state
     },
-    openFreezeAccount(state, action: PayloadAction<Pick<IFreezeAccount, 'tokenAddress' >>) {
+    openFreezeAccount(state, action: PayloadAction<Pick<IFreezeAccount, 'tokenAddress'>>) {
       state.freezeAccount.tokenAddress = action.payload.tokenAddress
       state.freezeAccount.open = true
       return state

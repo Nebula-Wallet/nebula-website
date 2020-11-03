@@ -8,15 +8,24 @@ export const {
   createToken,
   mintToken,
   freezeAccount,
-  thawAccount
+  thawAccount,
+  registerAccount
 } = keySelectors(store, [
   'createAccount',
   'createToken',
   'mintToken',
   'freezeAccount',
-  'thawAccount'
+  'thawAccount',
+  'registerAccount'
 ])
 
-export const modalsSelectors = { createAccount, createToken, mintToken, freezeAccount, thawAccount }
+export const modalsSelectors = {
+  createAccount,
+  createToken,
+  mintToken,
+  freezeAccount,
+  thawAccount,
+  registerAccount
+}
 
 export default modalsSelectors

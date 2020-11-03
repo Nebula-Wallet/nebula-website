@@ -5,8 +5,9 @@ import { PublicKey } from '@solana/web3.js'
 import { getCurrentSolanaConnection } from '@web3/solana/connection'
 import { Status } from '@reducers/solanaConnection'
 import { actions } from '@reducers/nameService'
+import { actions as snackbarsActions } from '@reducers/snackbars'
 import { parseUserRegisterData } from '@web3/solana/data'
-import { AccountNameServiceMap } from '@sagas/solana/nameService'
+import { AccountNameServiceMap } from '@web3/solana/static'
 
 const NameServiceEvents = () => {
   const dispatch = useDispatch()
@@ -26,6 +27,13 @@ const NameServiceEvents = () => {
             const record = parseUserRegisterData(accountInfo.accountInfo.data)
             if (record.initialized) {
               dispatch(actions.addNewAccount(record))
+              dispatch(
+                snackbarsActions.add({
+                  message: `${record.name} just registered account.`,
+                  variant: 'info',
+                  persist: false
+                })
+              )
             }
           }
           // console.log(accountInfo)

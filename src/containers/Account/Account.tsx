@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Account from '@components/Account/Account'
 import { balance, address } from '@selectors/solanaWallet'
 import { actions } from '@reducers/solanaWallet'
+import { actions as modalsActions } from '@reducers/modals'
 import SendMoneyModal from '@containers/Modals/SendMoneyModal'
 import { network } from '@selectors/solanaConnection'
 import { myName } from '@selectors/nameService'
@@ -30,6 +31,9 @@ export const AccountWrapper: React.FC = () => {
         name={name}
         onSend={() => {
           setOpen(true)
+        }}
+        onRegister={() => {
+          dispatch(modalsActions.openModal('registerAccount'))
         }}
         onAirdrop={() => {
           dispatch(actions.airdrop())

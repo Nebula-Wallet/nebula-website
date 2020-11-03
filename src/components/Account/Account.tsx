@@ -12,6 +12,7 @@ export interface IProps {
   balance: number
   onSend: () => void
   onAirdrop?: () => void
+  onRegister: () => void
   network: SolanaNetworks
   name: string | undefined
 }
@@ -21,7 +22,8 @@ export const Account: React.FC<IProps> = ({
   onSend,
   network,
   onAirdrop,
-  name
+  name,
+  onRegister
 }) => {
   const classes = useStyles()
   return (
@@ -37,13 +39,15 @@ export const Account: React.FC<IProps> = ({
             <Grid item>
               {name ? (
                 <Typography variant='h4' color='textPrimary'>
-                  Your alias: {name}
+                  Your nickname: <span className={classes.nickname}>{name}</span>
                 </Typography>
               ) : (
                 <CommonButton
                   name='Register alias'
                   className={classes.registerButton}
-                  onClick={() => {}}
+                  onClick={() => {
+                    onRegister()
+                  }}
                   startIcon={<VerifiedUserIcon style={{ fontSize: 27 }} />}
                 />
               )}

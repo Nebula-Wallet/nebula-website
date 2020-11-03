@@ -16,6 +16,7 @@ import CreateToken from '@containers/Modals/CreateToken'
 import MintTokenModal from '@containers/Modals/MintTokenModal'
 import FreezeAccountModal from '@containers/Modals/FreezeAccountModal'
 import ThawAccountModal from '@containers/Modals/ThawAccountModal'
+import RegisterAccountModal from '@containers/Modals/RegisterAccountModal'
 import GlobalLoader from '@containers/GlobalLoader/GlobalLoader'
 setConfig({
   reloadHooks: false
@@ -33,6 +34,7 @@ const App: React.FC = () => {
             <MintTokenModal />
             <FreezeAccountModal />
             <ThawAccountModal />
+            <RegisterAccountModal />
             <CreateToken />
             <GlobalLoader />
           </SnackbarProvider>
