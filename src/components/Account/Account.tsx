@@ -30,7 +30,7 @@ export const Account: React.FC<IProps> = ({
     <>
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.titleDiv}>
-          <Grid container justify='space-between' alignItems='center'>
+          <Grid container justify='space-between' alignItems='center' className={classes.titleContainer}>
             <Grid item>
               <Typography variant='h4' color='primary' className={classes.title}>
                 Account

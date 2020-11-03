@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: 'bold',
     marginLeft: 20
   },
+  titleContainer: {
+    height: 51
+  },
   titleDiv: {
     marginBottom: 16,
     paddingBottom: 8,
