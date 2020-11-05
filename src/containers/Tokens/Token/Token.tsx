@@ -28,18 +28,20 @@ export const Token: React.FC<ISendMoneyModal> = ({ token, tokenName }) => {
           </Typography>
         </Grid>
         <Grid item xs={4}>
-          {tokenName && (
-            <Typography
-              variant='h5'
-              color='textPrimary'
-              className={classes.field}
-              style={{ fontWeight: 'bold' }}>
-              {tokenName}
-            </Typography>
-          )}
-          <Typography variant='h6' color='textPrimary' className={classes.field}>
-            {token.programId}
-          </Typography>
+          <Grid container direction='row'>
+            {tokenName && (
+              <Grid item>
+                <Typography variant='h5' color='textPrimary' className={classes.tokenName}>
+                  {tokenName}
+                </Typography>
+              </Grid>
+            )}
+            <Grid item xs={12}>
+              <Typography variant='h6' color='textPrimary' className={classes.field}>
+                {token.programId}
+              </Typography>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs className={classes.balanceDiv}>
           <Grid container alignItems='center' justify='space-between'>

@@ -38,6 +38,12 @@ const useStyles = makeStyles(() => ({
   },
   balanceDiv: {
     minWidth: 350
+  },
+  tokenName: {
+    fontWeight: 'bold',
+    background: 'linear-gradient(90deg, rgba(65,223,208,1) 0%, rgba(238,131,239,1) 100%);',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent'
   }
 }))
 
