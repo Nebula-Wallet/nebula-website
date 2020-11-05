@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     '& .MuiDialog-paper': {
       padding: 10,
-      height: 300,
+      height: 390,
       width: 430,
       background: colors.blue.neon
     }
@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   inputDiv: {
     minHeight: 100,
+    width: '100%',
     position: 'relative'
   },
   txid: {
@@ -76,6 +77,31 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: `${colors.blue.neon}`,
       borderColor: colors.blue.neon
     }
+  },
+  paper: {
+    backgroundColor: colors.black.background,
+    margin: 0
+  },
+  inputTokenName: {
+    fontWeight: 'bold'
+  },
+  inputTokenAddress: {
+    fontWeight: 'bold',
+    fontSize: 10,
+    color: colors.gray.base
+  },
+  optionDiv: {
+    padding: 8,
+    '&:hover': {
+      backgroundColor: colors.blue.neonHover
+    }
+  },
+  option: {
+    padding: '0px !important'
+  },
+  info: {
+    marginBottom: 32,
+    textAlign: 'center'
   }
 }))
 

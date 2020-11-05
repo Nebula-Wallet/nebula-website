@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable no-new */
 import React from 'react'
@@ -9,7 +10,7 @@ import {
   CircularProgress,
   TextField
 } from '@material-ui/core'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers'
 
@@ -19,23 +20,27 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import { PublicKey } from '@solana/web3.js'
 import CommonButton from '@components/CommonButton/CommonButton'
 import useStyles from './style'
-
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete'
+import { ITokenRecord } from '@reducers/nameService'
 export interface ICreateAccountModal {
   open: boolean
   loading: boolean
   handleClose: () => void
   onSend: (tokenAddress: string) => void
   address?: string
+  registeredTokens?: Map<string, ITokenRecord>
 }
 export interface FormFields {
   tokenAddress: string
 }
+const filter = createFilterOptions<ITokenRecord>()
 export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
   open,
   loading,
   handleClose,
   onSend,
-  address
+  address,
+  registeredTokens = new Map<string, ITokenRecord>()
 }) => {
   const classes = useStyles()
   const schema = yup.object().shape({
@@ -51,14 +56,18 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
       })
       .required('Provide token address.')
   })
-  const { control, errors, formState, reset, handleSubmit } = useForm<FormFields>({
+  const { errors, formState, reset, handleSubmit, setValue, register, trigger } = useForm<
+    FormFields
+  >({
     resolver: yupResolver(schema),
     mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: { tokenAddress: '' },
     shouldFocusError: true
   })
-
+  React.useEffect(() => {
+    register('tokenAddress')
+  }, [register])
   const clearAndSubmit = (data: FormFields) => {
     onSend(data.tokenAddress)
     reset()
@@ -110,7 +119,7 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
             style={{ width: '100%', height: '100%' }}
             onSubmit={e => {
               e.preventDefault()
-              handleSubmit(clearAndSubmit)(e)
+              handleSubmit(clearAndSubmit, () => {})(e)
             }}>
             <Grid
               container
@@ -118,18 +127,70 @@ export const CreateAccountModal: React.FC<ICreateAccountModal> = ({
               direction='column'
               justify='center'
               alignItems='center'>
+              <Grid item>
+                <Typography variant='body2' className={classes.info}>
+                  Please select registered token or enter address of token you want to add.
+                </Typography>
+              </Grid>
               <Grid item className={classes.inputDiv}>
-                <Controller
-                  as={TextField}
-                  helperText={errors.tokenAddress?.message}
-                  error={!!errors.tokenAddress?.message}
-                  className={classes.input}
-                  id='outlined-search'
-                  label='Token Address'
-                  type='text'
-                  name='tokenAddress'
-                  variant='outlined'
-                  control={control}
+                <Autocomplete
+                  freeSolo
+                  options={Array.from(registeredTokens.values()).map(option => option)}
+                  classes={{ paper: classes.paper, root: classes.input, option: classes.option }}
+                  onChange={(_, option) => {
+                    if (typeof option === 'string') {
+                      setValue('tokenAddress', option)
+                      return option
+                    }
+                    setValue('tokenAddress', option?.pubKey || '')
+                    trigger('tokenAddress')
+                  }}
+                  renderOption={option => (
+                    <Grid container className={classes.optionDiv} direction='column'>
+                      <Grid item>
+                        <Typography
+                          variant='body2'
+                          color='textPrimary'
+                          className={classes.inputTokenName}>
+                          {option.name}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography
+                          variant='body2'
+                          color='textPrimary'
+                          className={classes.inputTokenAddress}>
+                          {option.pubKey}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  )}
+                  getOptionLabel={option => {
+                    if (typeof option === 'string') {
+                      return option
+                    }
+                    if (option.name) {
+                      return option.name
+                    }
+                    return option.name
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params)
+                    return filtered
+                  }}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      label='Token'
+                      onChange={a => {
+                        setValue('tokenAddress', a.target.value)
+                        trigger('tokenAddress')
+                      }}
+                      variant='outlined'
+                      error={Boolean(errors?.tokenAddress)}
+                      helperText={errors?.tokenAddress?.message}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item>

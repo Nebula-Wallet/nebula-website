@@ -12,7 +12,8 @@ export const colors = {
     base: '#0B2545',
     light: '#66AFF5',
     neon: '#08F7FE',
-    astel: '#48ADF1'
+    astel: '#48ADF1',
+    neonHover: 'rgba(8, 247, 254, 0.15)'
   },
   gray: {
     base: '#8DA9C4',
