@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   paper: {
-    backgroundColor: colors.black.background,
+    backgroundColor: colors.black.greyish,
     margin: 0
   },
   inputTokenName: {
