@@ -11,8 +11,9 @@ import { actions as snackbarsActions } from '@reducers/snackbars'
 
 export interface ISendMoneyModal {
   token: ITokenAccount
+  tokenName?: string
 }
-export const Token: React.FC<ISendMoneyModal> = ({ token }) => {
+export const Token: React.FC<ISendMoneyModal> = ({ token, tokenName }) => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const pendingTransactions = useSelector(transactions)
@@ -27,6 +28,15 @@ export const Token: React.FC<ISendMoneyModal> = ({ token }) => {
           </Typography>
         </Grid>
         <Grid item xs={4}>
+          {tokenName && (
+            <Typography
+              variant='h5'
+              color='textPrimary'
+              className={classes.field}
+              style={{ fontWeight: 'bold' }}>
+              {tokenName}
+            </Typography>
+          )}
           <Typography variant='h6' color='textPrimary' className={classes.field}>
             {token.programId}
           </Typography>

@@ -3,6 +3,7 @@ import React from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import { accountsArray } from '@selectors/solanaWallet'
 import { actions } from '@reducers/modals'
+import nameServiceSelectors from '@selectors/nameService'
 import { useDispatch, useSelector } from 'react-redux'
 import Token from './Token/Token'
 import CommonButton from '@components/CommonButton/CommonButton'
@@ -12,6 +13,7 @@ import useStyles from './style'
 export const Tokens: React.FC = () => {
   const classes = useStyles()
   const userTokens = useSelector(accountsArray)
+  const registeredTokens = useSelector(nameServiceSelectors.tokens)
   const dispatch = useDispatch()
   return (
     <>
@@ -59,7 +61,7 @@ export const Tokens: React.FC = () => {
             {userTokens
               .sort((a, b) => b.balance - a.balance)
               .map(token => (
-                <Token token={token} />
+                <Token token={token} tokenName={registeredTokens.get(token.programId)?.name} />
               ))}
           </Grid>
         </Grid>
