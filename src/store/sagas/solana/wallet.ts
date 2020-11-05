@@ -25,7 +25,7 @@ import { Status } from '@reducers/provider'
 import { actions as uiActions } from '@reducers/ui'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { actions as snackbarsActions } from '@reducers/snackbars'
-import { fetchRegisteredAddresses } from './nameService'
+import { fetchRegisteredAddresses, fetchRegisteredTokens } from './nameService'
 import { balance } from '@selectors/solanaWallet'
 // import { createToken } from './token'
 
@@ -257,6 +257,7 @@ export function* init(): Generator {
   yield put(actions.setBalance(balance))
   yield put(actions.setStatus(Status.Initalized))
   yield* call(fetchRegisteredAddresses)
+  yield* call(fetchRegisteredTokens)
   // const address = yield* call(fetchGovernedTokens)
   // const address = yield* call(getTokenDetails)
   // console.log(address)

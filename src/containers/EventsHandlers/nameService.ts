@@ -6,20 +6,23 @@ import { getCurrentSolanaConnection } from '@web3/solana/connection'
 import { Status } from '@reducers/solanaConnection'
 import { actions } from '@reducers/nameService'
 import { actions as snackbarsActions } from '@reducers/snackbars'
-import { parseUserRegisterData } from '@web3/solana/data'
-import { AccountNameServiceMap } from '@web3/solana/static'
+import {
+  parseTokenRegisterData,
+  parseUserRegisterData
+} from '@web3/solana/data'
+import { AccountNameServiceMap, DEFAULT_PUBLIC_KEY, TokenNameServiceMap } from '@web3/solana/static'
 
 const NameServiceEvents = () => {
   const dispatch = useDispatch()
   const networkStatus = useSelector(status)
   const currentNetwork = useSelector(network)
-  // Solana Main Wallet
   React.useEffect(() => {
     const connection = getCurrentSolanaConnection()
     if (!connection || networkStatus !== Status.Initalized) {
       return
     }
     const connectEvents = () => {
+      // Account name service
       connection.onProgramAccountChange(
         new PublicKey(AccountNameServiceMap[currentNetwork]),
         accountInfo => {
@@ -36,7 +39,26 @@ const NameServiceEvents = () => {
               )
             }
           }
-          // console.log(accountInfo)
+        }
+      )
+      // Token name service
+      connection.onProgramAccountChange(
+        new PublicKey(TokenNameServiceMap[currentNetwork]),
+        accountInfo => {
+          if (accountInfo.accountInfo.data.length === 64) {
+            const record = parseTokenRegisterData(accountInfo.accountInfo.data)
+
+            if (record.pubKey !== DEFAULT_PUBLIC_KEY.toString()) {
+              dispatch(actions.addNewToken(record))
+              dispatch(
+                snackbarsActions.add({
+                  message: `Token ${record.name} has been registered.`,
+                  variant: 'info',
+                  persist: false
+                })
+              )
+            }
+          }
         }
       )
     }

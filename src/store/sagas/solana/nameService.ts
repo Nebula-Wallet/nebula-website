@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { IAddressRecord, actions } from '@reducers/nameService'
+import { IAddressRecord, actions, ITokenRecord } from '@reducers/nameService'
 import { network } from '@selectors/solanaConnection'
 import {
   PublicKey,
@@ -7,12 +7,13 @@ import {
   Transaction,
   TransactionInstruction
 } from '@solana/web3.js'
-import { parseUserRegisterData } from '@web3/solana/data'
+import { parseTokenRegisterData, parseUserRegisterData } from '@web3/solana/data'
 import {
   AccountNameServiceMap,
   CounterPointerAddressMap,
   CounterAddressMap,
-  PAYMENT_ACCOUNT_ADDRESS
+  PAYMENT_ACCOUNT_ADDRESS,
+  TokenNameServiceMap
 } from '@web3/solana/static'
 import { call, put, SagaGenerator, select } from 'typed-redux-saga'
 
@@ -40,6 +41,23 @@ export function* fetchRegisteredAddresses(): Generator {
     }
   }
   yield* put(actions.addAccounts(accountsMaping))
+}
+
+export function* fetchRegisteredTokens(): Generator {
+  const connection = yield* call(getConnection)
+  const currentNetwork = yield* select(network)
+  const info = yield* call(
+    [connection, connection.getProgramAccounts],
+    new PublicKey(TokenNameServiceMap[currentNetwork])
+  )
+  const tokensMapping: Map<string, ITokenRecord> = new Map()
+  for (const record of info) {
+    if (record.account.data.length === 64) {
+      const parsedRecord = parseTokenRegisterData(record.account.data)
+      tokensMapping.set(parsedRecord.pubKey, parsedRecord)
+    }
+  }
+  yield* put(actions.addTokens(tokensMapping))
 }
 interface IRegisterAccount {
   name: string
@@ -84,6 +102,48 @@ export function* registerAccount({
     new Transaction().add(instruction),
     [wallet],
     { commitment: 'singleGossip' }
+  )
+  return txid
+}
+interface IRegisterToken {
+  name: string
+  tokenAddress: PublicKey
+  storageAccount: PublicKey
+}
+export function* registerToken({
+  name,
+  tokenAddress,
+  storageAccount
+}: IRegisterToken): SagaGenerator<string> {
+  const connection = yield* call(getConnection)
+  const wallet = yield* call(getWallet)
+  const currentNetwork = yield* select(network)
+  const instructionData = Buffer.alloc(32)
+  instructionData.write(name)
+  const instruction = new TransactionInstruction({
+    keys: [
+      // This account must match one in smartcontract
+      { pubkey: new PublicKey(PAYMENT_ACCOUNT_ADDRESS), isSigner: false, isWritable: true },
+      {
+        pubkey: tokenAddress,
+        isSigner: false,
+        isWritable: true
+      },
+      {
+        pubkey: wallet.publicKey,
+        isSigner: true,
+        isWritable: true
+      },
+      { pubkey: storageAccount, isSigner: false, isWritable: true }
+    ],
+    programId: new PublicKey(TokenNameServiceMap[currentNetwork]),
+    data: instructionData
+  })
+  const txid = yield* call(
+    sendAndConfirmTransaction,
+    connection,
+    new Transaction().add(instruction),
+    [wallet]
   )
   return txid
 }

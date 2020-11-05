@@ -1,7 +1,8 @@
+import { PublicKey } from '@solana/web3.js'
 import { SolanaNetworks } from './connection'
 
 export const PAYMENT_ACCOUNT_ADDRESS = 'Gsun7cGFrSUm3N8TEBq7Uu9xz4c9cE4pKdbtETQiSgZX'
-
+export const DEFAULT_PUBLIC_KEY = new PublicKey(Buffer.alloc(32))
 // Programs
 export const ACCOUNT_NAME_STORAGE_SIZE = 73
 export const AccountNameServiceMap: { [key in SolanaNetworks]: string } = {
@@ -18,4 +19,10 @@ export const CounterAddressMap: { [key in SolanaNetworks]: string } = {
   [SolanaNetworks.DEV]: 'GboDAfZRQS3a7TaXzneSfPNYoKJuB3dHxp8EDQ5EZNpN',
   [SolanaNetworks.TEST]: 'GboDAfZRQS3a7TaXzneSfPNYoKJuB3dHxp8EDQ5EZNpN',
   [SolanaNetworks.MAIN]: 'GboDAfZRQS3a7TaXzneSfPNYoKJuB3dHxp8EDQ5EZNpN'
+}
+// Tokens
+export const TokenNameServiceMap: { [key in SolanaNetworks]: string } = {
+  [SolanaNetworks.DEV]: '7qYiprri3wMDKHKpnTakzDjHbKtkzePUDsnjCRvhkCx9',
+  [SolanaNetworks.TEST]: '7qYiprri3wMDKHKpnTakzDjHbKtkzePUDsnjCRvhkCx9',
+  [SolanaNetworks.MAIN]: '7qYiprri3wMDKHKpnTakzDjHbKtkzePUDsnjCRvhkCx9'
 }

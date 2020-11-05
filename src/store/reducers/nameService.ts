@@ -8,15 +8,19 @@ export interface IAddressRecord {
   initialized: boolean
   index: number
 }
+export interface ITokenRecord {
+  pubKey: string
+  name: string
+}
 
 export interface INameService {
   accounts: Map<string, IAddressRecord>
-  tokens: { [key in string]: string }
+  tokens: Map<string, ITokenRecord>
 }
 
 export const defaultState: INameService = {
   accounts: new Map(),
-  tokens: {}
+  tokens: new Map()
 }
 export const nameServiceSliceName = 'nameService'
 const nameServiceSlice = createSlice({
@@ -27,6 +31,10 @@ const nameServiceSlice = createSlice({
       state.accounts = action.payload
       return state
     },
+    addTokens(state, action: PayloadAction<Map<string, ITokenRecord>>) {
+      state.tokens = action.payload
+      return state
+    },
     addNewAccount(state, action: PayloadAction<IAddressRecord>) {
       if (state.accounts.has(action.payload.name)) {
         if (state.accounts.get(action.payload.name)!.index > action.payload.index) {
@@ -35,6 +43,10 @@ const nameServiceSlice = createSlice({
       } else {
         state.accounts.set(action.payload.name, action.payload)
       }
+      return state
+    },
+    addNewToken(state, action: PayloadAction<ITokenRecord>) {
+      state.tokens.set(action.payload.pubKey, action.payload)
       return state
     }
   }
