@@ -13,7 +13,7 @@ import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers'
 
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
+import NoteAddIcon from '@material-ui/icons/NoteAdd'
 import CloseIcon from '@material-ui/icons/Close'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import { PublicKey } from '@solana/web3.js'
@@ -74,7 +74,7 @@ export const CreateTokenModal: React.FC<ICreateTokenModal> = ({
       <Dialog open={open} onClose={handleClose} className={classes.root}>
         <DialogTitle>
           <Grid container className={classes.titleWrapper}>
-            <AttachMoneyIcon />
+            <NoteAddIcon />
             <Typography variant='body1'>{'Create Token'}</Typography>
             <CloseIcon onClick={handleClose} className={classes.close} />
           </Grid>
