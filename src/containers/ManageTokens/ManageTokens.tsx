@@ -135,7 +135,7 @@ const ManageTokensPage: React.FC = () => {
                         className={classes.optionDiv}>
                         <Grid container justify='space-between' wrap='nowrap'>
                           <Grid item xs={8} className={classes.address}>
-                            {token.programId}
+                            {token.tokenName || token.programId}
                           </Grid>
                           <Grid item> Supply: {token.supply / 10 ** token.decimals} </Grid>
                         </Grid>
@@ -152,6 +152,7 @@ const ManageTokensPage: React.FC = () => {
                   mintAuthority={selectedToken.mintAuthority}
                   supply={selectedToken.supply}
                   userAddress={userAddress}
+                  tokenName={selectedToken.tokenName}
                   onMint={() => {
                     dispatch(
                       actions.openMintToken({

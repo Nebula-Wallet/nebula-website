@@ -12,6 +12,7 @@ export interface IProps {
   userAddress: string
   freezeAuthority: string | null
   decimals: number
+  tokenName?: string
   onMint: () => void
   onFreeze: () => void
   onThaw: () => void
@@ -25,7 +26,8 @@ export const TokenInfo: React.FC<IProps> = ({
   onMint,
   onFreeze,
   onThaw,
-  userAddress
+  userAddress,
+  tokenName
 }) => {
   const classes = useStyles()
   return (
@@ -51,6 +53,20 @@ export const TokenInfo: React.FC<IProps> = ({
                       <Grid item xs className={classes.addressDiv}>
                         <Typography variant='body1' color='textPrimary' className={classes.address}>
                           {address}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} className={classes.data}>
+                    <Grid container direction='row' justify='space-between'>
+                      <Grid item>
+                        <Typography variant='body1' color='textPrimary'>
+                          Token name
+                        </Typography>
+                      </Grid>
+                      <Grid item xs className={classes.addressDiv}>
+                        <Typography variant='body1' color='textPrimary' className={classes.address}>
+                          {tokenName || '---'}
                         </Typography>
                       </Grid>
                     </Grid>
