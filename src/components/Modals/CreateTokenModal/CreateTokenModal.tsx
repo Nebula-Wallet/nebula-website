@@ -24,19 +24,22 @@ export interface ICreateTokenModal {
   open: boolean
   loading: boolean
   handleClose: () => void
-  onSend: (freezeAuthority: string, decimals: number) => void
+  onSend: (freezeAuthority: string, decimals: number, tokenName: string) => void
+  message?: string
   address?: string
 }
 export interface FormFields {
   freezeAuthority: string
   decimals: number
+  tokenName: string
 }
 export const CreateTokenModal: React.FC<ICreateTokenModal> = ({
   open,
   loading,
   handleClose,
   onSend,
-  address
+  address,
+  message
 }) => {
   const classes = useStyles()
   const schema = yup.object().shape({
@@ -51,18 +54,19 @@ export const CreateTokenModal: React.FC<ICreateTokenModal> = ({
         return false
       }
     }),
+    tokenName: yup.string().max(32),
     decimals: yup.number().min(0).max(18, 'Max decimals: 18').required('Decimals are required.')
   })
   const { control, errors, formState, reset, handleSubmit } = useForm<FormFields>({
     resolver: yupResolver(schema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
-    defaultValues: { freezeAuthority: '', decimals: 9 },
+    defaultValues: { freezeAuthority: '', decimals: 9, tokenName: '' },
     shouldFocusError: true
   })
 
   const clearAndSubmit = (data: FormFields) => {
-    onSend(data.freezeAuthority, data.decimals)
+    onSend(data.freezeAuthority, data.decimals, data.tokenName)
     reset()
   }
   return (
@@ -83,7 +87,7 @@ export const CreateTokenModal: React.FC<ICreateTokenModal> = ({
             direction='column'
             alignItems='center'>
             <CircularProgress size={100} className={classes.progress} />
-            <Typography variant='body2'>Sending transactions...</Typography>
+            <Typography variant='body2'>{message || 'Sending transactions...'}</Typography>
           </Grid>
         ) : address ? (
           <Grid
@@ -120,20 +124,27 @@ export const CreateTokenModal: React.FC<ICreateTokenModal> = ({
               direction='column'
               justify='center'
               alignItems='center'>
+              <Grid item>
+                <Typography variant='body2' className={classes.info}>
+                  You can register name that will be associated with your token. Token names are not
+                  unique. Cost: ~ 2.00 SOL
+                </Typography>
+              </Grid>
               <Grid item className={classes.inputDiv}>
                 <Controller
                   as={TextField}
-                  helperText={errors.freezeAuthority?.message}
-                  error={!!errors.freezeAuthority?.message}
+                  helperText={errors.tokenName?.message}
+                  error={!!errors.tokenName?.message}
                   className={classes.input}
                   id='outlined-search'
-                  label='Freeze Authority'
+                  label='Token Name (optional)'
                   type='text'
-                  name='freezeAuthority'
+                  name='tokenName'
                   variant='outlined'
                   control={control}
                 />
               </Grid>
+
               <Grid item className={classes.inputDiv}>
                 <Controller
                   as={TextField}
@@ -144,6 +155,20 @@ export const CreateTokenModal: React.FC<ICreateTokenModal> = ({
                   label='Token decimals'
                   type='number'
                   name='decimals'
+                  variant='outlined'
+                  control={control}
+                />
+              </Grid>
+              <Grid item className={classes.inputDiv}>
+                <Controller
+                  as={TextField}
+                  helperText={errors.freezeAuthority?.message}
+                  error={!!errors.freezeAuthority?.message}
+                  className={classes.input}
+                  id='outlined-search'
+                  label='Freeze Authority (optional)'
+                  type='text'
+                  name='freezeAuthority'
                   variant='outlined'
                   control={control}
                 />

@@ -12,6 +12,8 @@ export interface ICreateToken {
   tokenAddress: string
   freezeAuthority: string
   mintAuthority: string
+  tokenName?: string
+  message?: string
   decimals: number
   sending: boolean
   error: string
@@ -237,15 +239,23 @@ const modalsSlice = createSlice({
       state.createAccount.error = action.payload.error
       return state
     },
-    createToken(state, action: PayloadAction<{ freezeAuthority: string, decimals: number }>) {
+    createToken(
+      state,
+      action: PayloadAction<{ freezeAuthority: string, decimals: number, tokenName?: string }>
+    ) {
       state.createToken.sending = true
       state.createToken.freezeAuthority = action.payload.freezeAuthority
       state.createToken.decimals = action.payload.decimals
+      state.createToken.tokenName = action.payload.tokenName
       return state
     },
     tokenCreated(state, action: PayloadAction<{ tokenAddress: string }>) {
       state.createToken.sending = false
       state.createToken.tokenAddress = action.payload.tokenAddress
+      return state
+    },
+    tokenCreateMessage(state, action: PayloadAction<{ message: string }>) {
+      state.createToken.message = action.payload.message
       return state
     },
     tokenCreatedError(state, action: PayloadAction<{ error: string }>) {

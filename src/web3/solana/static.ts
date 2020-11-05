@@ -5,6 +5,7 @@ export const PAYMENT_ACCOUNT_ADDRESS = 'Gsun7cGFrSUm3N8TEBq7Uu9xz4c9cE4pKdbtETQi
 export const DEFAULT_PUBLIC_KEY = new PublicKey(Buffer.alloc(32))
 // Programs
 export const ACCOUNT_NAME_STORAGE_SIZE = 73
+export const TOKEN_NAME_STORAGE_SIZE = 64
 export const AccountNameServiceMap: { [key in SolanaNetworks]: string } = {
   [SolanaNetworks.DEV]: '3pheqxp6nsXKEZKaBvH6Gd7gVimkE9KBVT8naYY1KMJn',
   [SolanaNetworks.TEST]: '3pheqxp6nsXKEZKaBvH6Gd7gVimkE9KBVT8naYY1KMJn',

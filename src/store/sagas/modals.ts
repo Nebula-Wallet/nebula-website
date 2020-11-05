@@ -9,9 +9,14 @@ import { createAccount, getWallet } from './solana/wallet'
 import { createToken, freezeAccount, mintToken, thawAccount } from './solana/token'
 import { network } from '@selectors/solanaConnection'
 import { createCleanAccount, sendSol } from './solana/utils'
-import { AccountNameServiceMap, ACCOUNT_NAME_STORAGE_SIZE } from '@web3/solana/static'
+import {
+  AccountNameServiceMap,
+  ACCOUNT_NAME_STORAGE_SIZE,
+  TokenNameServiceMap,
+  TOKEN_NAME_STORAGE_SIZE
+} from '@web3/solana/static'
 import { PublicKey } from '@solana/web3.js'
-import { registerAccount } from './solana/nameService'
+import { registerAccount, registerToken } from './solana/nameService'
 
 export function* handleCreateAccount(
   action: PayloadAction<PayloadTypes['createAccount']>
@@ -40,11 +45,45 @@ export function* handleCreateAccount(
 }
 export function* handleCreateToken(action: PayloadAction<PayloadTypes['createToken']>): Generator {
   try {
+    yield* put(
+      actions.tokenCreateMessage({
+        message: 'Creating token.'
+      })
+    )
     const tokenAddress = yield* call(
       createToken,
       action.payload.decimals,
       action.payload.freezeAuthority
     )
+    if (action.payload.tokenName) {
+      const currentNetwork = yield* select(network)
+      yield* put(
+        actions.tokenCreateMessage({
+          message: 'Creating storage account.'
+        })
+      )
+      const storageAccount = yield* call(
+        createCleanAccount,
+        TOKEN_NAME_STORAGE_SIZE,
+        new PublicKey(TokenNameServiceMap[currentNetwork])
+      )
+      yield* put(
+        actions.tokenCreateMessage({
+          message: 'Transfering fee.'
+        })
+      )
+      yield* call(sendSol, 1, storageAccount)
+      yield* put(
+        actions.tokenCreateMessage({
+          message: 'Registering name.'
+        })
+      )
+      yield* call(registerToken, {
+        name: action.payload.tokenName,
+        tokenAddress: new PublicKey(tokenAddress),
+        storageAccount
+      })
+    }
     yield* put(
       actions.tokenCreated({
         tokenAddress: tokenAddress

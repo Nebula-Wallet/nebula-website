@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     '& .MuiDialog-paper': {
       padding: 10,
-      height: 400,
+      height: 590,
       width: 430,
       background: colors.red.neon
     }
@@ -76,6 +76,10 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: `${colors.red.neon}`,
       borderColor: colors.red.neon
     }
+  },
+  info: {
+    marginBottom: 32,
+    textAlign: 'center'
   }
 }))
 

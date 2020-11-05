@@ -10,10 +10,11 @@ export const CreateTokenModal: React.FC = () => {
   const createToken = useSelector(modalsSelectors.createToken)
   return (
     <CreateTokenModalComponent
-      onSend={(freezeAuthority, decimals) => {
-        dispatch(actions.createToken({ freezeAuthority, decimals }))
+      onSend={(freezeAuthority, decimals, tokenName) => {
+        dispatch(actions.createToken({ freezeAuthority, decimals, tokenName }))
       }}
       open={createToken.open}
+      message={createToken.message}
       loading={createToken.sending}
       address={createToken.tokenAddress}
       handleClose={() => {
