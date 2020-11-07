@@ -38,6 +38,9 @@ const useStyles = makeStyles(() => ({
       backgroundColor: `${colors.blue.neon}`,
       borderColor: colors.blue.neon
     }
+  },
+  noTokensDiv: {
+    marginTop: 32
   }
 }))
 

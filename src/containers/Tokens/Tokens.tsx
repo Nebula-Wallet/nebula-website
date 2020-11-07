@@ -37,34 +37,68 @@ export const Tokens: React.FC = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Grid container className={classes.info}>
-            <Grid item xs={12} className={classes.headers}>
-              <Grid container style={{ flexWrap: 'nowrap' }}>
-                <Grid item xs={4}>
-                  <Typography variant='body1' color='textPrimary'>
-                    Account
+
+        {userTokens.length === 0 ? (
+          <>
+            <Grid item xs={12} className={classes.noTokensDiv}>
+              <Grid container direction='column' alignItems='center' justify='center'>
+                <Grid item>
+                  <Typography variant='h4' color='textPrimary'>
+                    You don't have any token accounts.
                   </Typography>
                 </Grid>
-                <Grid item xs={4}>
-                  <Typography variant='body1' color='textPrimary'>
-                    Token
+                <Grid item>
+                  <Typography variant='h4' color='textPrimary'>
+                    You can create one for registered tokens or provide address of token.
                   </Typography>
                 </Grid>
-                <Grid item xs className={classes.balanceDiv}>
-                  <Typography variant='body1' color='textPrimary'>
-                    Balance
-                  </Typography>
+                <Grid item style={{ width: '100%', marginTop: 24 }}>
+                  <Grid container wrap='nowrap' justify='center'>
+                    <Grid item>
+                      <CommonButton
+                        name='Add Account'
+                        className={classes.addAccountButton}
+                        onClick={() => {
+                          dispatch(actions.openModal('createAccount'))
+                        }}
+                        startIcon={<PlaylistAddIcon style={{ fontSize: 27 }} />}
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-            {userTokens
-              .sort((a, b) => b.balance - a.balance)
-              .map(token => (
-                <Token token={token} tokenName={registeredTokens.get(token.programId)?.name} />
-              ))}
+          </>
+        ) : (
+          <Grid item xs={12}>
+            <Grid container className={classes.info}>
+              <Grid item xs={12} className={classes.headers}>
+                <Grid container style={{ flexWrap: 'nowrap' }}>
+                  <Grid item xs={4}>
+                    <Typography variant='body1' color='textPrimary'>
+                      Account
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant='body1' color='textPrimary'>
+                      Token
+                    </Typography>
+                  </Grid>
+                  <Grid item xs className={classes.balanceDiv}>
+                    <Typography variant='body1' color='textPrimary'>
+                      Balance
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+              {userTokens
+                .sort((a, b) => b.balance - a.balance)
+                .map(token => (
+                  <Token token={token} tokenName={registeredTokens.get(token.programId)?.name} />
+                ))}
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </Grid>
     </>
   )
