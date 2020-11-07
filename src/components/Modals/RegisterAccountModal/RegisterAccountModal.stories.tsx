@@ -2,6 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import RegisterAccountModal from './RegisterAccountModal'
 import { withKnobs, boolean } from '@storybook/addon-knobs'
+import { IAddressRecord } from '@reducers/nameService'
 
 storiesOf('modal/RegisterAccountModal', module)
   .addDecorator(withKnobs)
@@ -17,6 +18,7 @@ storiesOf('modal/RegisterAccountModal', module)
         onSend={() => {
           console.log('send RegisterAccountModal')
         }}
+        registeredAccounts={new Map<string, IAddressRecord>()}
       />
     )
   })
@@ -26,6 +28,7 @@ storiesOf('modal/RegisterAccountModal', module)
         loading={boolean('loading', false)}
         open
         message='Done'
+        registeredAccounts={new Map<string, IAddressRecord>()}
         handleClose={() => {
           console.log('close RegisterAccountModal')
         }}

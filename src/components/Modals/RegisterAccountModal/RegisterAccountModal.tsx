@@ -18,6 +18,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import CommonButton from '@components/CommonButton/CommonButton'
 import useStyles from './style'
+import { IAddressRecord } from '@reducers/nameService'
 
 export interface IRegisterAccountModal {
   open: boolean
@@ -25,6 +26,7 @@ export interface IRegisterAccountModal {
   message?: string
   handleClose: () => void
   onSend: (name: string) => void
+  registeredAccounts: Map<string, IAddressRecord>
 }
 export interface FormFields {
   name: string
@@ -34,11 +36,23 @@ export const RegisterAccountModal: React.FC<IRegisterAccountModal> = ({
   loading,
   handleClose,
   onSend,
-  message
+  message,
+  registeredAccounts
 }) => {
   const classes = useStyles()
   const schema = yup.object().shape({
-    name: yup.string().min(1).max(32).required('Provide token address.')
+    name: yup
+      .string()
+      .min(1)
+      .max(32)
+      .test('is-registered', 'Nickname already taken.', data => {
+        if (registeredAccounts.has(data)) {
+          return false
+        } else {
+          return true
+        }
+      })
+      .required('Provide token address.')
   })
   const { control, errors, formState, reset, handleSubmit } = useForm<FormFields>({
     resolver: yupResolver(schema),
