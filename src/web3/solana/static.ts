@@ -8,22 +8,22 @@ export const ACCOUNT_NAME_STORAGE_SIZE = 73
 export const AccountNameServiceMap: { [key in SolanaNetworks]: string } = {
   [SolanaNetworks.DEV]: '3pheqxp6nsXKEZKaBvH6Gd7gVimkE9KBVT8naYY1KMJn',
   [SolanaNetworks.TEST]: 'GdpSvdF4MzHbe5Rtdiz1xGU2hLbHiLaop6Wxpq5eeULT',
-  [SolanaNetworks.MAIN]: '3pheqxp6nsXKEZKaBvH6Gd7gVimkE9KBVT8naYY1KMJn'
+  [SolanaNetworks.MAIN]: 'E5p8jKGv9PAmibUPzVnbhpWZitQvScCAenjT38MCAM6W'
 }
 export const CounterPointerAddressMap: { [key in SolanaNetworks]: string } = {
   [SolanaNetworks.DEV]: '8mV2uvKEwRaChCFeutCSsEJisq3SvuyKPvehRYG4cJj1',
   [SolanaNetworks.TEST]: '7r6unXmTmmSkAr3FJgXzHDgNjkp9EtgrN9rME3Ld1WyC',
-  [SolanaNetworks.MAIN]: '8mV2uvKEwRaChCFeutCSsEJisq3SvuyKPvehRYG4cJj1'
+  [SolanaNetworks.MAIN]: 'H4EsZEY38B5sRwDKuHoXehwPMYZ2EVHMs6M6tixTyEd6'
 }
 export const CounterAddressMap: { [key in SolanaNetworks]: string } = {
   [SolanaNetworks.DEV]: 'GboDAfZRQS3a7TaXzneSfPNYoKJuB3dHxp8EDQ5EZNpN',
   [SolanaNetworks.TEST]: '3UJD2eBn6hCZUsNkFK2VJbhZFQf5pVD4h86dMSV8mhBY',
-  [SolanaNetworks.MAIN]: 'GboDAfZRQS3a7TaXzneSfPNYoKJuB3dHxp8EDQ5EZNpN'
+  [SolanaNetworks.MAIN]: '3FK4yPChYY7RFZ27ZMe3ywB994WDiCB3k3ffRiVoAafr'
 }
 // Tokens
 export const TOKEN_NAME_STORAGE_SIZE = 64
 export const TokenNameServiceMap: { [key in SolanaNetworks]: string } = {
   [SolanaNetworks.DEV]: '7qYiprri3wMDKHKpnTakzDjHbKtkzePUDsnjCRvhkCx9',
   [SolanaNetworks.TEST]: 'i5zRfRzE1dDXN2AsCS1Ck3mAwVazCch9eyYrSYR8Z3X',
-  [SolanaNetworks.MAIN]: '7qYiprri3wMDKHKpnTakzDjHbKtkzePUDsnjCRvhkCx9'
+  [SolanaNetworks.MAIN]: 'CoqVKdyQWGE1siyuSj6Uvax2CZb4ikYrQ4Fm1yLYgtXN'
 }
