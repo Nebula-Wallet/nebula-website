@@ -103,7 +103,7 @@ export function* registerAccount({
     connection,
     new Transaction().add(instruction),
     [wallet],
-    { commitment: 'singleGossip' }
+    { commitment: 'max' }
   )
   return txid
 }
@@ -145,7 +145,8 @@ export function* registerToken({
     sendAndConfirmTransaction,
     connection,
     new Transaction().add(instruction),
-    [wallet]
+    [wallet],
+    { commitment: 'max' }
   )
   return txid
 }

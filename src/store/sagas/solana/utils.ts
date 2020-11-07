@@ -30,7 +30,9 @@ export function* createCleanAccount(
       programId: programId
     })
   )
-  yield* call(sendAndConfirmTransaction, connection, transaction, [wallet, dataAccount])
+  yield* call(sendAndConfirmTransaction, connection, transaction, [wallet, dataAccount], {
+    commitment: 'max'
+  })
   return dataAccount.publicKey
 }
 export function* sendSol(amount: number, recipient: PublicKey): SagaGenerator<string> {
@@ -43,6 +45,8 @@ export function* sendSol(amount: number, recipient: PublicKey): SagaGenerator<st
       lamports: amount * 1e9
     })
   )
-  const txid = yield* call(sendAndConfirmTransaction, connection, transaction, [wallet])
+  const txid = yield* call(sendAndConfirmTransaction, connection, transaction, [wallet], {
+    commitment: 'max'
+  })
   return txid
 }
