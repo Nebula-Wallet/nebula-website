@@ -11,5 +11,6 @@
           "@web3/*": ["./src/web3/*"],
           "@static/*": ["./src/static/*"]
       }
-  }
+  },
+  "exclude": ["node_modules","public","build"]
 }
