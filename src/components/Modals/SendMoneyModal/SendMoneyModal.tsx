@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable no-new */
 import React from 'react'
@@ -19,7 +20,10 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import { PublicKey } from '@solana/web3.js'
 import CommonButton from '@components/CommonButton/CommonButton'
 import useStyles from './style'
+import { IAddressRecord } from '@reducers/nameService'
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
+const filter = createFilterOptions<IAddressRecord>()
 export interface ISendMoneyModal {
   open: boolean
   loading: boolean
@@ -27,6 +31,7 @@ export interface ISendMoneyModal {
   onSend: (amount: number, recipient: string) => void
   txid?: string
   balance: number
+  accounts?: Map<string, IAddressRecord>
 }
 export interface FormFields {
   amount: number
@@ -38,7 +43,8 @@ export const SendMoneyModal: React.FC<ISendMoneyModal> = ({
   handleClose,
   onSend,
   txid,
-  balance
+  balance,
+  accounts = new Map<string, IAddressRecord>()
 }) => {
   const classes = useStyles()
   const schema = yup.object().shape({
@@ -55,7 +61,9 @@ export const SendMoneyModal: React.FC<ISendMoneyModal> = ({
       .required('Provide recipient.'),
     amount: yup.number().min(0).max(balance).required('Name & Surname required.')
   })
-  const { control, errors, formState, reset, setValue, handleSubmit } = useForm<FormFields>({
+  const { control, errors, formState, reset, setValue, handleSubmit, trigger, register } = useForm<
+    FormFields
+  >({
     resolver: yupResolver(schema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
@@ -63,6 +71,9 @@ export const SendMoneyModal: React.FC<ISendMoneyModal> = ({
     shouldFocusError: true
   })
 
+  React.useEffect(() => {
+    register('recipient')
+  }, [register])
   const clearAndSubmit = (data: FormFields) => {
     onSend(data.amount, data.recipient)
     reset()
@@ -115,18 +126,70 @@ export const SendMoneyModal: React.FC<ISendMoneyModal> = ({
               direction='column'
               justify='center'
               alignItems='center'>
-              <Grid item className={classes.inputDiv}>
-                <Controller
-                  as={TextField}
-                  helperText={errors.recipient?.message}
-                  error={!!errors.recipient?.message}
-                  className={classes.input}
-                  id='outlined-search'
-                  label='Recipient'
-                  type='text'
-                  name='recipient'
-                  variant='outlined'
-                  control={control}
+              <Grid item>
+                <Typography variant='body2' className={classes.info}>
+                  Please select registered user or enter recipient address. (Usernames are unique.)
+                </Typography>
+              </Grid>
+              <Grid item className={classes.inputDiv} style={{ width: '100%' }}>
+                <Autocomplete
+                  freeSolo
+                  options={Array.from(accounts.values()).map(option => option)}
+                  classes={{ paper: classes.paper, root: classes.input, option: classes.option }}
+                  onChange={(_, option) => {
+                    if (typeof option === 'string') {
+                      setValue('recipient', option)
+                      return option
+                    }
+                    setValue('recipient', option?.pubKey || '')
+                    trigger('recipient')
+                  }}
+                  renderOption={option => (
+                    <Grid container className={classes.optionDiv} direction='column'>
+                      <Grid item>
+                        <Typography
+                          variant='body2'
+                          color='textPrimary'
+                          className={classes.inputTokenName}>
+                          {option.name}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography
+                          variant='body2'
+                          color='textPrimary'
+                          className={classes.inputTokenAddress}>
+                          {option.pubKey}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  )}
+                  getOptionLabel={option => {
+                    if (typeof option === 'string') {
+                      return option
+                    }
+                    if (option.name) {
+                      return option.name
+                    }
+                    return option.name
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params)
+                    return filtered
+                  }}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      label='Recipient'
+                      onChange={a => {
+                        setValue('recipient', a.target.value)
+                        trigger('recipient')
+                      }}
+                      variant='outlined'
+                      error={Boolean(errors?.recipient)}
+                      helperText={errors?.recipient?.message}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item className={classes.inputDiv}>
