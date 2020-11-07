@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { network, status } from '@selectors/solanaConnection'
 import { PublicKey } from '@solana/web3.js'
-import { getCurrentSolanaConnection } from '@web3/solana/connection'
+import { getSolanaConnection } from '@web3/solana/connection'
 import { Status } from '@reducers/solanaConnection'
 import { actions } from '@reducers/nameService'
 import { actions as snackbarsActions } from '@reducers/snackbars'
@@ -17,7 +17,7 @@ const NameServiceEvents = () => {
   const networkStatus = useSelector(status)
   const currentNetwork = useSelector(network)
   React.useEffect(() => {
-    const connection = getCurrentSolanaConnection()
+    const connection = getSolanaConnection(currentNetwork)
     if (!connection || networkStatus !== Status.Initalized) {
       return
     }
@@ -47,7 +47,6 @@ const NameServiceEvents = () => {
         accountInfo => {
           if (accountInfo.accountInfo.data.length === 64) {
             const record = parseTokenRegisterData(accountInfo.accountInfo.data)
-
             if (record.pubKey !== DEFAULT_PUBLIC_KEY.toString()) {
               dispatch(actions.addNewToken(record))
               dispatch(
@@ -61,6 +60,7 @@ const NameServiceEvents = () => {
           }
         }
       )
+      console.log(connection)
     }
     connectEvents()
   }, [dispatch, networkStatus, currentNetwork])

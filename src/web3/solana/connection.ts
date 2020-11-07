@@ -23,7 +23,7 @@ export const networkToName = (network: SolanaNetworks) => {
 let _connection: Connection | null = null
 let _network: SolanaNetworks
 
-const getSolanaConnection = async (url: SolanaNetworks): Promise<Connection> => {
+const getSolanaConnection = (url: SolanaNetworks): Connection => {
   if (_connection && _network === url) {
     return _connection
   }

@@ -31,12 +31,14 @@ export function* fetchRegisteredAddresses(): Generator {
   for (const record of info) {
     if (record.account.data.length === 73) {
       const parsedRecord = parseUserRegisterData(record.account.data)
-      if (accountsMaping.has(parsedRecord.name)) {
-        if (accountsMaping.get(parsedRecord.name)!.index > parsedRecord.index) {
+      if (parsedRecord.initialized) {
+        if (accountsMaping.has(parsedRecord.name)) {
+          if (accountsMaping.get(parsedRecord.name)!.index > parsedRecord.index) {
+            accountsMaping.set(parsedRecord.name, parsedRecord)
+          }
+        } else {
           accountsMaping.set(parsedRecord.name, parsedRecord)
         }
-      } else {
-        accountsMaping.set(parsedRecord.name, parsedRecord)
       }
     }
   }

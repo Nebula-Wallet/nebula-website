@@ -2,20 +2,21 @@ import React, { useState } from 'react'
 import * as R from 'remeda'
 import { useDispatch, useSelector } from 'react-redux'
 import { accounts, address, status as walletStatus } from '@selectors/solanaWallet'
-import { status } from '@selectors/solanaConnection'
+import { network, status } from '@selectors/solanaConnection'
 import { actions } from '@reducers/solanaWallet'
 import { AccountInfo, PublicKey } from '@solana/web3.js'
-import { getCurrentSolanaConnection } from '@web3/solana/connection'
+import { getSolanaConnection } from '@web3/solana/connection'
 import { Status } from '@reducers/solanaConnection'
 import { parseTokenAccountData } from '@web3/solana/data'
 
 const SolanaWalletEvents = () => {
   const dispatch = useDispatch()
   const publicKey = useSelector(address)
+  const currentNetwork = useSelector(network)
   const networkStatus = useSelector(status)
   // Solana Main Wallet
   React.useEffect(() => {
-    const connection = getCurrentSolanaConnection()
+    const connection = getSolanaConnection(currentNetwork)
     if (!publicKey || !connection || networkStatus !== Status.Initalized) {
       return
     }
@@ -33,7 +34,7 @@ const SolanaWalletEvents = () => {
   const walletStat = useSelector(walletStatus)
   const [initializedAccounts, setInitializedAccounts] = useState<Set<string>>(new Set())
   React.useEffect(() => {
-    const connection = getCurrentSolanaConnection()
+    const connection = getSolanaConnection(currentNetwork)
     if (!connection || walletStat !== Status.Initalized || networkStatus !== Status.Initalized) {
       return
     }
