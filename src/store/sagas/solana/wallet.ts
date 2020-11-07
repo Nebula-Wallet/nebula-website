@@ -258,17 +258,29 @@ export function* init(): Generator {
   yield put(actions.setStatus(Status.Initalized))
   yield* call(fetchRegisteredAddresses)
   yield* call(fetchRegisteredTokens)
-  // const address = yield* call(fetchGovernedTokens)
-  // const address = yield* call(getTokenDetails)
-  // console.log(address)
-  // yield* call(
-  //   sendToken,
-  //   'CDeKid1BQ4kL2xi4Ytn8XsKpCeoYnT4XULKLTtrg2FvK',
-  //   'AgGfPnfCyfa71My835QupNZ4m7sKDEwaVHT8xkDQudaa',
-  //   100 * 1e9,
-  //   '7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp'
-  // )
-  // yield* call(createAccount, '7sCjFDNSnhzRnB2Py8kDoNtx75DLTg1U68aGg2gZPryp')
+}
+
+export function* handleWalletInit(): Generator {
+  yield* put(
+    uiActions.setLoader({
+      open: true,
+      message: 'Loading wallet.'
+    })
+  )
+  yield* call(init)
+  yield* put(
+    uiActions.setLoader({
+      open: false,
+      message: ''
+    })
+  )
+  yield* put(
+    snackbarsActions.add({
+      message: 'Wallet loaded sucessfully',
+      variant: 'info',
+      persist: false
+    })
+  )
 }
 
 export function* aridropSaga(): Generator {
@@ -281,7 +293,7 @@ export function* transactionsSaga(): Generator {
   yield takeEvery(actions.addTransaction, handleTransaction)
 }
 export function* initSaga(): Generator {
-  yield takeLeading(actions.initWallet, init)
+  yield takeLeading(actions.initWallet, handleWalletInit)
 }
 export function* walletSaga(): Generator {
   yield all([transactionsSaga, initSaga, rescanTokensSaga, aridropSaga].map(spawn))
