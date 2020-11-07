@@ -16,6 +16,7 @@ import WalletPage from '@containers/WalletPage/WalletPage'
 import { navigation } from '@selectors/ui'
 import { Tabs } from '@components/Header/Header'
 import ManageTokens from '@containers/ManageTokens/ManageTokens'
+import Footer from '@components/Footer/Footer'
 
 const WelcomePage: React.FC = () => {
   const classes = useStyles()
@@ -48,6 +49,9 @@ const WelcomePage: React.FC = () => {
       </Grid>
       <Grid item>
         {signerStatus === Status.Initalized ? getComponent(currentNavigation) : <PageSkeleton />}
+      </Grid>
+      <Grid item>
+        <Footer></Footer>
       </Grid>
       {signerStatus === Status.Initalized && <EventsHandlers />}
     </Grid>
