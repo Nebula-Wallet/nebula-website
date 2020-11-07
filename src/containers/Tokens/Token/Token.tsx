@@ -8,6 +8,7 @@ import useStyles from './style'
 import CommonButton from '@components/CommonButton/CommonButton'
 import { Grid, Typography } from '@material-ui/core'
 import { actions as snackbarsActions } from '@reducers/snackbars'
+import CopyToolTip from '@components/CopyToolTip/CopyToolTip'
 
 export interface ISendMoneyModal {
   token: ITokenAccount
@@ -23,9 +24,11 @@ export const Token: React.FC<ISendMoneyModal> = ({ token, tokenName }) => {
     <Grid item xs={12} className={classes.tokenDiv}>
       <Grid container alignItems='center' style={{ flexWrap: 'nowrap' }}>
         <Grid item xs={4}>
-          <Typography variant='h6' color='textPrimary' className={classes.field}>
-            {token.address}
-          </Typography>
+          <CopyToolTip text={token.address}>
+            <Typography variant='h6' color='textPrimary' className={classes.field}>
+              {token.address}
+            </Typography>
+          </CopyToolTip>
         </Grid>
         <Grid item xs={4}>
           <Grid container direction='row'>
@@ -37,9 +40,11 @@ export const Token: React.FC<ISendMoneyModal> = ({ token, tokenName }) => {
               </Grid>
             )}
             <Grid item xs={12}>
-              <Typography variant='h6' color='textPrimary' className={classes.field}>
-                {token.programId}
-              </Typography>
+              <CopyToolTip text={token.programId}>
+                <Typography variant='h6' color='textPrimary' className={classes.field}>
+                  {token.programId}
+                </Typography>
+              </CopyToolTip>
             </Grid>
           </Grid>
         </Grid>

@@ -7,6 +7,7 @@ import { SolanaNetworks } from '@web3/solana/connection'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 import NearMeIcon from '@material-ui/icons/NearMe'
 import FlightIcon from '@material-ui/icons/Flight'
+import CopyToolTip from '@components/CopyToolTip/CopyToolTip'
 export interface IProps {
   address: string
   balance: number
@@ -30,7 +31,11 @@ export const Account: React.FC<IProps> = ({
     <>
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.titleDiv}>
-          <Grid container justify='space-between' alignItems='center' className={classes.titleContainer}>
+          <Grid
+            container
+            justify='space-between'
+            alignItems='center'
+            className={classes.titleContainer}>
             <Grid item>
               <Typography variant='h4' color='primary' className={classes.title}>
                 Account
@@ -91,12 +96,14 @@ export const Account: React.FC<IProps> = ({
                           </Typography>
                         </Grid>
                         <Grid item xs className={classes.addressDiv}>
-                          <Typography
-                            variant='body1'
-                            color='textPrimary'
-                            className={classes.address}>
-                            {address}
-                          </Typography>
+                          <CopyToolTip text={address}>
+                            <Typography
+                              variant='body1'
+                              color='textPrimary'
+                              className={classes.address}>
+                              {address}
+                            </Typography>
+                          </CopyToolTip>
                         </Grid>
                       </Grid>
                     </Grid>
