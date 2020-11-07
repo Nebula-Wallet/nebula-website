@@ -6,30 +6,22 @@ import Skeleton from '@material-ui/lab/Skeleton'
 export const PageSkeleton: React.FC = () => {
   const classes = useStyles()
   return (
-    <Grid container className={classes.root}>
-      <Grid item xs={12}>
-        <Grid
-          container
-          spacing={4}
-          className={classes.headerRoot}
-          alignItems='center'
-          justify='space-evenly'>
-          <Grid item lg={4}>
-            <Skeleton variant='rect' width={330} height={330} className={classes.roundBorder} />
+    <Grid container className={classes.contentContainer} justify='center'>
+      <Grid item xs={12} className={classes.contentWrapper}>
+        <Grid container>
+          <Grid item xs={12} className={classes.divider}>
+            <Skeleton variant='rect' height={60} className={classes.roundBorder} />
           </Grid>
-          <Grid item lg={4}>
-            <Skeleton variant='rect' width={330} height={330} className={classes.roundBorder} />
+          <Grid item xs={12} style={{ marginTop: 24 }}>
+            <Skeleton variant='rect' height={260} className={classes.roundBorder} />
           </Grid>
-          <Grid item lg={4}>
-            <Skeleton variant='rect' width={330} height={330} className={classes.roundBorder} />
+          <Grid item xs={12} className={classes.divider} style={{ marginTop: 32 }}>
+            <Skeleton variant='rect' height={60} className={classes.roundBorder} />
+          </Grid>
+          <Grid item xs={12} style={{ marginTop: 24 }}>
+            <Skeleton variant='rect' height={260} className={classes.roundBorder} />
           </Grid>
         </Grid>
-      </Grid>
-      <Grid item xs={12} className={classes.switch}>
-        <Skeleton variant='rect' width={260} height={50} className={classes.roundBorder} />
-      </Grid>
-      <Grid item xs={12} className={classes.content}>
-        <Skeleton variant='rect' width={'90%'} height={800} className={classes.roundBorder} />
       </Grid>
     </Grid>
   )

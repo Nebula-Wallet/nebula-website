@@ -1,20 +1,16 @@
 import { makeStyles } from '@material-ui/core/styles'
-
+import { colors } from '@static/theme'
 const useStyles = makeStyles(() => ({
-  root: {
-    width: '100%',
-    marginTop: 100,
-    marginLeft: 40
-  },
-  headerRoot: {
+  contentContainer: {
     width: '100%'
   },
-  switch: {
-    marginTop: 120
+  contentWrapper: {
+    maxWidth: 1160,
+    padding: 16
   },
-  content: {
-    marginTop: 60,
-    marginBottom: 140
+  divider: {
+    paddingBottom: 8,
+    borderBottom: `2px solid ${colors.green.hover}`
   },
   roundBorder: {
     borderRadius: 15
