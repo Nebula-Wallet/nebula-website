@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Grid, PropTypes, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { ReactComponent as TwitterIcon } from '@static/svg/twitter-ic-footer.svg'
 import { ReactComponent as GithubIcon } from '@static/svg/github-ic-footer.svg'
 import { ReactComponent as LinkedinIcFooter } from '@static/svg/linkedin-ic-footer.svg'

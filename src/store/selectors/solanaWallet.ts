@@ -52,7 +52,7 @@ export const myName = createSelector(
   nameServiceSelectors.accounts,
   address,
   (registeredAccounts, myAddress) => {
-    for (const [_, record] of registeredAccounts.entries()) {
+    for (const [, record] of registeredAccounts.entries()) {
       if (record.pubKey === myAddress) {
         return record.name
       }

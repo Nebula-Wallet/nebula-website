@@ -27,7 +27,7 @@ const SolanaWalletEvents = () => {
       })
     }
     connectEvents()
-  }, [dispatch, publicKey, networkStatus])
+  }, [dispatch, publicKey, networkStatus, currentNetwork])
 
   // Solana Tokens
   const tokensAccounts = useSelector(accounts)
@@ -62,11 +62,9 @@ const SolanaWalletEvents = () => {
         }
       })
       setInitializedAccounts(tempSet)
-      // TODO remove events on change on network
-      // console.log(connection.removeAccountChangeListener)
     }
     connectEvents()
-  }, [dispatch, tokensAccounts, networkStatus, walletStat])
+  }, [dispatch, tokensAccounts, networkStatus, walletStat, currentNetwork])
 
   return null
 }

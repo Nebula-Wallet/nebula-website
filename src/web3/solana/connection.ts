@@ -32,11 +32,13 @@ const getSolanaConnection = (url: SolanaNetworks): Connection => {
     // @ts-expect-error
     const programAccountSub: number = _connection._programAccountChangeSubscriptionCounter
     for (let index = 1; index <= programAccountSub; index++) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       _connection.removeProgramAccountChangeListener(index)
     }
     // @ts-expect-error
     const accountSub: number = _connection._accountChangeSubscriptionCounter
     for (let index = 1; index <= accountSub; index++) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       _connection.removeAccountChangeListener(index)
     }
 

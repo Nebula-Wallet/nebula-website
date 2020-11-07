@@ -7,7 +7,6 @@ import {
   Grid,
   Typography
 } from '@material-ui/core'
-// import SynthetifyIconHorizontal from '@components/SynthetifyIconHorizontal/SynthetifyIconHorizontal'
 import CommonButton from '@components/CommonButton/CommonButton'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import AppsIcon from '@material-ui/icons/Apps'
@@ -37,26 +36,21 @@ export const Header: React.FC<IHeader> = ({
 }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
+  // Artist: https://www.flaticon.com/authors/photo3idea-studio
   return (
     <>
       <Grid container className={classes.root} justify='space-between' alignItems='center'>
         <Grid item>
           <Grid container alignItems='center' className={classes.logoDiv} onClick={onClickLogo}>
             <Grid item>
-            {/* // Artist: https://www.flaticon.com/authors/photo3idea-studio */}
               <img src={NebulaIcon} alt='' className={classes.nebulaLogo} />
             </Grid>
             <Grid item>
-              <Typography
-                variant='h3'
-                color='primary'
-                className={classes.title}
-                >
+              <Typography variant='h3' color='primary' className={classes.title}>
                 Nebula Wallet
               </Typography>
             </Grid>
           </Grid>
-          {/* <SynthetifyIconHorizontal onClick={onClickLogo} /> */}
         </Grid>
         <Grid item>
           <BottomNavigation
