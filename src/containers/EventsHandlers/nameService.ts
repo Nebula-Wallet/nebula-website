@@ -60,7 +60,6 @@ const NameServiceEvents = () => {
           }
         }
       )
-      console.log(connection)
     }
     connectEvents()
   }, [dispatch, networkStatus, currentNetwork])

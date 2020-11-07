@@ -1,9 +1,9 @@
 import { Connection } from '@solana/web3.js'
 
 enum SolanaNetworks {
-  DEV = 'http://devnet.solana.com',
-  TEST = 'http://testnet.solana.com',
-  MAIN = 'http://api.mainnet-beta.solana.com'
+  DEV = 'https://devnet.solana.com',
+  TEST = 'https://testnet.solana.com',
+  MAIN = 'https://api.mainnet-beta.solana.com'
 }
 export const networkToName = (network: SolanaNetworks) => {
   switch (network) {
@@ -26,6 +26,21 @@ let _network: SolanaNetworks
 const getSolanaConnection = (url: SolanaNetworks): Connection => {
   if (_connection && _network === url) {
     return _connection
+  }
+  // Drop events on network change
+  if (_connection) {
+    // @ts-expect-error
+    const programAccountSub: number = _connection._programAccountChangeSubscriptionCounter
+    for (let index = 1; index <= programAccountSub; index++) {
+      _connection.removeProgramAccountChangeListener(index)
+    }
+    // @ts-expect-error
+    const accountSub: number = _connection._accountChangeSubscriptionCounter
+    for (let index = 1; index <= accountSub; index++) {
+      _connection.removeAccountChangeListener(index)
+    }
+
+    _connection = null
   }
   _connection = new Connection(url)
   _network = url

@@ -12,11 +12,16 @@ export const Footer: React.FC = () => {
     <Grid container className={classes.root} justify='center'>
       <Grid item xs={12} className={classes.content}>
         <Grid container xs={12} justify='space-between' spacing={4}>
-          <Grid item>
+          <Grid item xs={8}>
             <Grid container direction='column'>
-              <Grid item xs={8}>
+              <Grid item>
                 <Typography variant='h4' color='textPrimary'>
-                  This is experimental version of wallet. Please use at your own risk.
+                  This is experimental version of wallet.
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant='h4' color='textPrimary'>
+                  Please use at your own risk.
                 </Typography>
               </Grid>
               <Grid item style={{ marginTop: 8 }}>

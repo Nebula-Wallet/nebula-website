@@ -40,15 +40,17 @@ const WelcomePage: React.FC = () => {
     }
   }
   return (
-    <Grid container direction='column' className={classes.background}>
+    <Grid container direction='column' className={classes.background} justify='space-between'>
       <Grid item>
-        <InfoBar message={message} initialized={initialized} />
-      </Grid>
-      <Grid item>
-        <Header />
-      </Grid>
-      <Grid item>
-        {signerStatus === Status.Initalized ? getComponent(currentNavigation) : <PageSkeleton />}
+        <Grid item>
+          <InfoBar message={message} initialized={initialized} />
+        </Grid>
+        <Grid item>
+          <Header />
+        </Grid>
+        <Grid item>
+          {signerStatus === Status.Initalized ? getComponent(currentNavigation) : <PageSkeleton />}
+        </Grid>
       </Grid>
       <Grid item>
         <Footer></Footer>
