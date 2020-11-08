@@ -28,6 +28,10 @@ export const Footer: React.FC = () => {
                 <TwitterIcon
                   className={classes.icon}
                   onClick={() => window.open(social.nebulaTwitter)}></TwitterIcon>
+                <GithubIcon
+                  className={classes.icon}
+                  style={{ marginLeft: 16 }}
+                  onClick={() => window.open(social.nebulaGithub)}></GithubIcon>
               </Grid>
             </Grid>
           </Grid>
