@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { IAddressRecord, actions, ITokenRecord } from '@reducers/nameService'
 import { network } from '@selectors/solanaConnection'
-import {
-  PublicKey,
-  Transaction,
-  TransactionInstruction
-} from '@solana/web3.js'
+import { PublicKey, Transaction, TransactionInstruction, Account } from '@solana/web3.js'
 import { parseTokenRegisterData, parseUserRegisterData } from '@web3/solana/data'
 import {
   AccountNameServiceMap,
@@ -17,8 +13,6 @@ import {
 import { call, put, SagaGenerator, select } from 'typed-redux-saga'
 
 import { getConnection } from './connection'
-import { confirmTransaction } from './utils'
-import { getWallet } from './wallet'
 
 export function* fetchRegisteredAddresses(): Generator {
   const connection = yield* call(getConnection)
@@ -66,87 +60,73 @@ interface IRegisterAccount {
   account: PublicKey
   storageAccount: PublicKey
 }
-export function* registerAccount({
+export function* registerAccountTransaction({
   name,
   account,
   storageAccount
-}: IRegisterAccount): SagaGenerator<string> {
-  const connection = yield* call(getConnection)
-  const wallet = yield* call(getWallet)
+}: IRegisterAccount): SagaGenerator<Transaction> {
   const currentNetwork = yield* select(network)
   const nameToRegister = Buffer.alloc(32)
   nameToRegister.write(name)
   const instructionData = Buffer.concat([account.toBuffer(), nameToRegister])
-  const instruction = new TransactionInstruction({
-    keys: [
-      // This account must match one in smartcontract
-      { pubkey: new PublicKey(PAYMENT_ACCOUNT_ADDRESS), isSigner: false, isWritable: true },
-      // This account must match one in smartcontract
-      {
-        pubkey: new PublicKey(CounterPointerAddressMap[currentNetwork]),
-        isSigner: false,
-        isWritable: true
-      },
-      // This account must match one in smartcontract
-      {
-        pubkey: new PublicKey(CounterAddressMap[currentNetwork]),
-        isSigner: false,
-        isWritable: true
-      },
-      { pubkey: storageAccount, isSigner: false, isWritable: true }
-    ],
-    programId: new PublicKey(AccountNameServiceMap[currentNetwork]),
-    data: instructionData
-  })
-  const txid = yield* call(
-    confirmTransaction,
-    connection,
-    new Transaction().add(instruction),
-    [wallet],
-    { commitment: 'max' }
+  return new Transaction().add(
+    new TransactionInstruction({
+      keys: [
+        // This account must match one in smartcontract
+        { pubkey: new PublicKey(PAYMENT_ACCOUNT_ADDRESS), isSigner: false, isWritable: true },
+        // This account must match one in smartcontract
+        {
+          pubkey: new PublicKey(CounterPointerAddressMap[currentNetwork]),
+          isSigner: false,
+          isWritable: true
+        },
+        // This account must match one in smartcontract
+        {
+          pubkey: new PublicKey(CounterAddressMap[currentNetwork]),
+          isSigner: false,
+          isWritable: true
+        },
+        { pubkey: storageAccount, isSigner: false, isWritable: true }
+      ],
+      programId: new PublicKey(AccountNameServiceMap[currentNetwork]),
+      data: instructionData
+    })
   )
-  return txid
 }
 interface IRegisterToken {
+  wallet: Account
   name: string
   tokenAddress: PublicKey
   storageAccount: PublicKey
 }
-export function* registerToken({
+export function* registerTokenTransaction({
+  wallet,
   name,
   tokenAddress,
   storageAccount
-}: IRegisterToken): SagaGenerator<string> {
-  const connection = yield* call(getConnection)
-  const wallet = yield* call(getWallet)
+}: IRegisterToken): SagaGenerator<Transaction> {
   const currentNetwork = yield* select(network)
   const instructionData = Buffer.alloc(32)
   instructionData.write(name)
-  const instruction = new TransactionInstruction({
-    keys: [
-      // This account must match one in smartcontract
-      { pubkey: new PublicKey(PAYMENT_ACCOUNT_ADDRESS), isSigner: false, isWritable: true },
-      {
-        pubkey: tokenAddress,
-        isSigner: false,
-        isWritable: true
-      },
-      {
-        pubkey: wallet.publicKey,
-        isSigner: true,
-        isWritable: true
-      },
-      { pubkey: storageAccount, isSigner: false, isWritable: true }
-    ],
-    programId: new PublicKey(TokenNameServiceMap[currentNetwork]),
-    data: instructionData
-  })
-  const txid = yield* call(
-    confirmTransaction,
-    connection,
-    new Transaction().add(instruction),
-    [wallet],
-    { commitment: 'max' }
+  return new Transaction().add(
+    new TransactionInstruction({
+      keys: [
+        // This account must match one in smartcontract
+        { pubkey: new PublicKey(PAYMENT_ACCOUNT_ADDRESS), isSigner: false, isWritable: true },
+        {
+          pubkey: tokenAddress,
+          isSigner: false,
+          isWritable: true
+        },
+        {
+          pubkey: wallet.publicKey,
+          isSigner: true,
+          isWritable: true
+        },
+        { pubkey: storageAccount, isSigner: false, isWritable: true }
+      ],
+      programId: new PublicKey(TokenNameServiceMap[currentNetwork]),
+      data: instructionData
+    })
   )
-  return txid
 }

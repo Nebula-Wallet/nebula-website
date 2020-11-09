@@ -12,12 +12,12 @@ import {
 
 import { call, SagaGenerator } from 'typed-redux-saga'
 import { getConnection } from './connection'
-import { getWallet } from './wallet'
 
 export async function confirmTransaction(
   connection: Connection,
   transaction: Transaction,
   signers: Account[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   options?: ConfirmOptions | undefined
 ): Promise<string> {
   const signature = await connection.sendTransaction(transaction, signers, {
@@ -47,44 +47,41 @@ export async function confirmTransaction(
   })
 }
 
-export function* createCleanAccount(
+export function* createCleanAccountTransaction(
   numBytes: number,
-  programId: PublicKey
-): SagaGenerator<PublicKey> {
+  programId: PublicKey,
+  wallet: Account
+): SagaGenerator<{ transaction: Transaction, storageAccount: Account }> {
   const connection = yield* call(getConnection)
-  const wallet = yield* call(getWallet)
   const dataAccount = new Account()
   const rentExemption = yield* call(
     [connection, connection.getMinimumBalanceForRentExemption],
     numBytes
   )
 
-  const transaction = new Transaction().add(
-    SystemProgram.createAccount({
-      fromPubkey: wallet.publicKey,
-      newAccountPubkey: dataAccount.publicKey,
-      lamports: rentExemption,
-      space: numBytes,
-      programId: programId
-    })
-  )
-  yield* call(confirmTransaction, connection, transaction, [wallet, dataAccount], {
-    commitment: 'max'
-  })
-  return dataAccount.publicKey
+  return {
+    transaction: new Transaction().add(
+      SystemProgram.createAccount({
+        fromPubkey: wallet.publicKey,
+        newAccountPubkey: dataAccount.publicKey,
+        lamports: rentExemption,
+        space: numBytes,
+        programId: programId
+      })
+    ),
+    storageAccount: dataAccount
+  }
 }
-export function* sendSol(amount: number, recipient: PublicKey): SagaGenerator<string> {
-  const connection = yield* call(getConnection)
-  const wallet = yield* call(getWallet)
-  const transaction = new Transaction().add(
+export function* sendSolTransaction(
+  amount: number,
+  recipient: PublicKey,
+  wallet: Account
+): SagaGenerator<Transaction> {
+  return new Transaction().add(
     SystemProgram.transfer({
       fromPubkey: wallet.publicKey,
       toPubkey: recipient,
       lamports: amount * 1e9
     })
   )
-  const txid = yield* call(confirmTransaction, connection, transaction, [wallet], {
-    commitment: 'max'
-  })
-  return txid
 }

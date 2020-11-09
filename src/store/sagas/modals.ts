@@ -8,15 +8,20 @@ import modalsSelectors from '@selectors/modals'
 import { createAccount, getWallet } from './solana/wallet'
 import { createToken, freezeAccount, mintToken, thawAccount } from './solana/token'
 import { network } from '@selectors/solanaConnection'
-import { createCleanAccount, sendSol } from './solana/utils'
+import {
+  confirmTransaction,
+  createCleanAccountTransaction,
+  sendSolTransaction
+} from './solana/utils'
 import {
   AccountNameServiceMap,
   ACCOUNT_NAME_STORAGE_SIZE,
   TokenNameServiceMap,
   TOKEN_NAME_STORAGE_SIZE
 } from '@web3/solana/static'
-import { PublicKey } from '@solana/web3.js'
-import { registerAccount, registerToken } from './solana/nameService'
+import { PublicKey, Transaction } from '@solana/web3.js'
+import { registerAccountTransaction, registerTokenTransaction } from './solana/nameService'
+import { getConnection } from './solana/connection'
 
 export function* handleCreateAccount(
   action: PayloadAction<PayloadTypes['createAccount']>
@@ -45,6 +50,9 @@ export function* handleCreateAccount(
 }
 export function* handleCreateToken(action: PayloadAction<PayloadTypes['createToken']>): Generator {
   try {
+    const connection = yield* call(getConnection)
+    const wallet = yield* call(getWallet)
+    const currentNetwork = yield* select(network)
     yield* put(
       actions.tokenCreateMessage({
         message: 'Creating token.'
@@ -56,33 +64,31 @@ export function* handleCreateToken(action: PayloadAction<PayloadTypes['createTok
       action.payload.freezeAuthority
     )
     if (action.payload.tokenName) {
-      const currentNetwork = yield* select(network)
       yield* put(
         actions.tokenCreateMessage({
-          message: 'Creating storage account.'
+          message: 'Registering Token.'
         })
       )
-      const storageAccount = yield* call(
-        createCleanAccount,
+      const { transaction: storageAccountTx, storageAccount } = yield* call(
+        createCleanAccountTransaction,
         TOKEN_NAME_STORAGE_SIZE,
-        new PublicKey(TokenNameServiceMap[currentNetwork])
+        new PublicKey(TokenNameServiceMap[currentNetwork]),
+        wallet
       )
-      yield* put(
-        actions.tokenCreateMessage({
-          message: 'Transfering fee.'
-        })
-      )
-      yield* call(sendSol, 1, storageAccount)
-      yield* put(
-        actions.tokenCreateMessage({
-          message: 'Registering name.'
-        })
-      )
-      yield* call(registerToken, {
+      const sendSolTx = yield* call(sendSolTransaction, 1, storageAccount.publicKey, wallet)
+
+      const registerTokenTx = yield* call(registerTokenTransaction, {
         name: action.payload.tokenName,
         tokenAddress: new PublicKey(tokenAddress),
-        storageAccount
+        storageAccount: storageAccount.publicKey,
+        wallet
       })
+      yield* call(
+        confirmTransaction,
+        connection,
+        new Transaction().add(storageAccountTx).add(sendSolTx).add(registerTokenTx),
+        [wallet, storageAccount]
+      )
     }
     yield* put(
       actions.tokenCreated({
@@ -198,37 +204,36 @@ export function* handleRegisterAccount(
   action: PayloadAction<PayloadTypes['registerAccount']>
 ): Generator {
   try {
-    const currentNetwork = yield* select(network)
-    yield* put(
-      actions.updateRegisterAccount({
-        sending: true,
-        message: 'Creating storage account.'
-      })
-    )
-    const storageAccount = yield* call(
-      createCleanAccount,
-      ACCOUNT_NAME_STORAGE_SIZE,
-      new PublicKey(AccountNameServiceMap[currentNetwork])
-    )
-    yield* put(
-      actions.updateRegisterAccount({
-        sending: true,
-        message: 'Transfering fee.'
-      })
-    )
-    yield* call(sendSol, 1, storageAccount)
     yield* put(
       actions.updateRegisterAccount({
         sending: true,
         message: 'Registering name.'
       })
     )
+    const connection = yield* call(getConnection)
     const wallet = yield* call(getWallet)
-    const txid = yield* call(registerAccount, {
+    const currentNetwork = yield* select(network)
+
+    const { transaction: storageAccountTx, storageAccount } = yield* call(
+      createCleanAccountTransaction,
+      ACCOUNT_NAME_STORAGE_SIZE,
+      new PublicKey(AccountNameServiceMap[currentNetwork]),
+      wallet
+    )
+    const sendSolTx = yield* call(sendSolTransaction, 1, storageAccount.publicKey, wallet)
+
+    const registerAccountTx = yield* call(registerAccountTransaction, {
       name: action.payload.name,
       account: wallet.publicKey,
-      storageAccount
+      storageAccount: storageAccount.publicKey
     })
+
+    const txid = yield* call(
+      confirmTransaction,
+      connection,
+      new Transaction().add(storageAccountTx).add(sendSolTx).add(registerAccountTx),
+      [wallet, storageAccount]
+    )
     yield* put(
       actions.updateRegisterAccount({
         sending: false,
@@ -236,6 +241,7 @@ export function* handleRegisterAccount(
       })
     )
   } catch (error) {
+    console.log(error)
     yield put(
       snackbarsActions.add({
         message: 'Failed to send. Please try again.',
