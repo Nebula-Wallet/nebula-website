@@ -3,7 +3,6 @@ import { IAddressRecord, actions, ITokenRecord } from '@reducers/nameService'
 import { network } from '@selectors/solanaConnection'
 import {
   PublicKey,
-  sendAndConfirmTransaction,
   Transaction,
   TransactionInstruction
 } from '@solana/web3.js'
@@ -18,6 +17,7 @@ import {
 import { call, put, SagaGenerator, select } from 'typed-redux-saga'
 
 import { getConnection } from './connection'
+import { confirmTransaction } from './utils'
 import { getWallet } from './wallet'
 
 export function* fetchRegisteredAddresses(): Generator {
@@ -99,7 +99,7 @@ export function* registerAccount({
     data: instructionData
   })
   const txid = yield* call(
-    sendAndConfirmTransaction,
+    confirmTransaction,
     connection,
     new Transaction().add(instruction),
     [wallet],
@@ -142,7 +142,7 @@ export function* registerToken({
     data: instructionData
   })
   const txid = yield* call(
-    sendAndConfirmTransaction,
+    confirmTransaction,
     connection,
     new Transaction().add(instruction),
     [wallet],

@@ -12,13 +12,7 @@ import {
 import { actions, PayloadTypes } from '@reducers/solanaWallet'
 import { getConnection } from './connection'
 import { getSolanaWallet, TokenProgramMap } from '@web3/solana/wallet'
-import {
-  Account,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-  sendAndConfirmTransaction
-} from '@solana/web3.js'
+import { Account, PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
 import { Token } from '@solana/spl-token'
 import { network } from '@selectors/solanaConnection'
 import { Status } from '@reducers/provider'
@@ -27,6 +21,7 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { actions as snackbarsActions } from '@reducers/snackbars'
 import { fetchRegisteredAddresses, fetchRegisteredTokens } from './nameService'
 import { balance } from '@selectors/solanaWallet'
+import { confirmTransaction } from './utils'
 // import { createToken } from './token'
 
 export function* getWallet(): SagaGenerator<Account> {
@@ -70,7 +65,7 @@ export function* handleTransaction(
         amountToSend = action.payload.amount * 1e9
       }
       const signature = yield* call(
-        sendAndConfirmTransaction,
+        confirmTransaction,
         connection,
         new Transaction().add(
           SystemProgram.transfer({

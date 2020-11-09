@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable no-async-promise-executor */
+/* eslint-disable @typescript-eslint/return-await */
 import {
   Account,
+  ConfirmOptions,
+  Connection,
   PublicKey,
-  sendAndConfirmTransaction,
   SystemProgram,
   Transaction
 } from '@solana/web3.js'
@@ -9,6 +13,39 @@ import {
 import { call, SagaGenerator } from 'typed-redux-saga'
 import { getConnection } from './connection'
 import { getWallet } from './wallet'
+
+export async function confirmTransaction(
+  connection: Connection,
+  transaction: Transaction,
+  signers: Account[],
+  options?: ConfirmOptions | undefined
+): Promise<string> {
+  const signature = await connection.sendTransaction(transaction, signers, {
+    skipPreflight: true
+  })
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-undef-init
+    let timeout: number | undefined = undefined
+    const id = connection.onSignature(
+      signature,
+      result => {
+        console.log('confirm')
+        if (timeout) clearTimeout(timeout)
+        if (result.err) {
+          reject(new Error('failed'))
+        } else {
+          resolve(signature)
+        }
+      },
+      'singleGossip'
+    )
+    console.log(id)
+    timeout = setTimeout(() => {
+      connection.removeSignatureListener(id)
+      reject(new Error('timeout'))
+    }, 50000)
+  })
+}
 
 export function* createCleanAccount(
   numBytes: number,
@@ -21,6 +58,7 @@ export function* createCleanAccount(
     [connection, connection.getMinimumBalanceForRentExemption],
     numBytes
   )
+
   const transaction = new Transaction().add(
     SystemProgram.createAccount({
       fromPubkey: wallet.publicKey,
@@ -30,7 +68,7 @@ export function* createCleanAccount(
       programId: programId
     })
   )
-  yield* call(sendAndConfirmTransaction, connection, transaction, [wallet, dataAccount], {
+  yield* call(confirmTransaction, connection, transaction, [wallet, dataAccount], {
     commitment: 'max'
   })
   return dataAccount.publicKey
@@ -45,7 +83,7 @@ export function* sendSol(amount: number, recipient: PublicKey): SagaGenerator<st
       lamports: amount * 1e9
     })
   )
-  const txid = yield* call(sendAndConfirmTransaction, connection, transaction, [wallet], {
+  const txid = yield* call(confirmTransaction, connection, transaction, [wallet], {
     commitment: 'max'
   })
   return txid
