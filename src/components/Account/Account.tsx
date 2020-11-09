@@ -108,7 +108,7 @@ export const Account: React.FC<IProps> = ({
                       </Grid>
                     </Grid>
                     <Grid item xs={12} className={classes.buttonDiv}>
-                      <Grid container justify='flex-end'>
+                      <Grid container justify='flex-end' wrap='nowrap'>
                         {network !== SolanaNetworks.MAIN && (
                           <Grid item>
                             <CommonButton

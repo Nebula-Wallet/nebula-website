@@ -1,11 +1,14 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 import { colors } from '@static/theme'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   info: {
     padding: 32,
     backgroundColor: colors.blue.accent,
-    borderRadius: 24
+    borderRadius: 24,
+    [theme.breakpoints.down('sm')]: {
+      padding: 12
+    }
   },
   root: {
     width: '100%'

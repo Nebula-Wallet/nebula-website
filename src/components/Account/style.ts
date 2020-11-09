@@ -5,7 +5,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   info: {
     padding: 32,
     backgroundColor: colors.blue.accent,
-    borderRadius: 24
+    borderRadius: 24,
+    [theme.breakpoints.down('sm')]: {
+      padding: 24
+    }
   },
   root: {
     width: '100%'

@@ -70,7 +70,7 @@ export const Tokens: React.FC = () => {
             </Grid>
           </>
         ) : (
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{ overflowX: 'scroll' }}>
             <Grid container className={classes.info}>
               <Grid item xs={12} className={classes.headers}>
                 <Grid container style={{ flexWrap: 'nowrap' }}>

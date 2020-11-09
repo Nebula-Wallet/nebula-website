@@ -39,7 +39,7 @@ export const Header: React.FC<IHeader> = ({
   // Artist: https://www.flaticon.com/authors/photo3idea-studio
   return (
     <>
-      <Grid container className={classes.root} justify='space-between' alignItems='center'>
+      <Grid container className={classes.root} wrap='nowrap' justify='space-between' alignItems='center'>
         <Grid item>
           <Grid container alignItems='center' className={classes.logoDiv} onClick={onClickLogo}>
             <Grid item>

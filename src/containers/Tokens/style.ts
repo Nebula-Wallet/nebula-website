@@ -4,6 +4,7 @@ import { colors } from '@static/theme'
 const useStyles = makeStyles(() => ({
   info: {
     backgroundColor: colors.blue.accent,
+    minWidth: 800,
     borderRadius: 24,
     overflow: 'hidden'
   },

@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 import { colors } from '@static/theme'
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     height: 80,
     paddingLeft: 25,
@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer'
   },
   divButton: {
-    marginLeft: 70
+    // marginLeft: 70
   },
 
   button: {
@@ -98,7 +98,10 @@ const useStyles = makeStyles(() => ({
     marginTop: 4
   },
   logoDiv: {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    [theme.breakpoints.down('md')]: {
+      display: 'none'
+    }
   }
 }))
 
